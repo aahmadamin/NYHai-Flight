@@ -45,7 +45,7 @@ def Login():
 		error=None
 		if(data):
 			session['email'] = name
-			return redirect(url_for('home.html'))
+			return redirect(url_for('home_customer.html'))
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
