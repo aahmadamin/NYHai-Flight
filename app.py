@@ -11,42 +11,119 @@ conn = pymysql.connect(host='localhost',
 def main():
 	return render_template('index.html')
 
-@app.route('/showSignUp')
-def showSignUp():
-	return render_template('signup.html')
+@app.route('/showUsertype')
+def ShowUsertype():
 
-@app.route('/signUp', methods=['POST'])
-def signUp():
-	
+	return render_template('signup_usertype.html')
+@app.route('/Usertype_redirect', methods=['POST'])
+def Usertype_redirect():
+	user = request.form['type_user']
+	if user == 'Customer':
+		return render_template('signup_customer.html')
+	elif user == 'Airline Staff':
+		return render_template('signup_airlinestaff.html')
+	else:
+		return render_template('signup_bookingagent.html')
+	# return render_template('signup_customer.html')
+
+@app.route('/showSignUpCustomer')
+def showSignUpCustomer():
+
+	return render_template('signup_customer.html')
+
+@app.route('/ShowSignUpStaff')
+def ShowSignUpStaff():
+	return render_template('signup_staff.html')
+
+@app.route('/ShowSignUpAgent')
+def ShowSignUpAgent():
+	return render_template('signup_agent.html')
+
+@app.route('/signUpAgent', methods=['GET', 'POST'])
+def signUpAgent():
+	email = request.form['email']
+	passw = request.form['password']
+	agentid = request.form['agentid']
+
+	cursor = conn.cursor()
+	query = 'SELECT * FROM booking_agent WHERE email = %s'
+	cursor.execute (query, (email))
+	data=cursor.fetchone()
+	error = None
+	if(data):
+		error = "This user already exists"
+		#debug
+		return render_template('signup_bookingagent.html')
+	else:
+		ins = 'INSERT INTO booking_agent(email, password, booking_agent_id) VALUES(%s, %s, %s)'
+		
+
+		cursor.execute(ins, (email, passw, agentid))
+		conn.commit()
+		cursor.close()
+		return render_template('signin.html')
+
+@app.route('/signUpStaff', methods=['GET', 'POST'])
+def signUpStaff():
+	username = request.form['username']
+	password = request.form['password']
+	first_name = request.form['first_name']
+	last_name = request.form['last_name']
+	dob = request.form['dob']
+	airline = request.form['airline']
+	cursor = conn.cursor()
+	query = 'SELECT * FROM airline_staff WHERE username = %s'
+	cursor.execute (query, (username))
+	data=cursor.fetchone()
+	error = None
+	if(data):
+		error = "This user already exists"
+		#debug
+		return render_template('signup_staff.html')
+	else:
+		ins = 'INSERT INTO airline_staff(username, password, first_name, last_name, dob, airline_staff) VALUES(%s, %s, %s, %s, %s, %s)'
+		
+
+		cursor.execute(ins, (username, password, first_name, last_name, dob, airline_staff))
+		conn.commit()
+		cursor.close()
+		return render_template('signin.html')
+
+@app.route('/signUpCustomer', methods=['GET','POST'])
+def signUpCustomer():
 	email = request.form['inputEmail']
 	password = request.form['inputPassword']
 	name = request.form['inputName']
-	passport_country = request.form['Country']
-	Pass_exp = request.form['inputPass_exp']
-	pass_num = request.form['inputPass_num']
-	dob = request.form['inputDOB']
-	state = request.form['inputState']
-	city = request.form['inputCity']
-	street = request.form['inputStreet']
+	date = request.form['dob']
 	building = request.form['building']
+	street = request.form['inputStreet']
+	city = request.form['inputCity']
+	state = request.form['inputState']
 	phone = request.form['inputPhone']
+	passport_country = request.form['inputCountry']
+	pass_num = request.form['inputPass_num']
+	Pass_exp = request.form['inputPass_exp']
 
+	#ERROR DOB retirns bad request
+	
+	#date = '0002-02-22'
 	cursor = conn.cursor()
 	query = 'SELECT * FROM customer WHERE email = %s'
 	cursor.execute (query, (email))
 	data=cursor.fetchone()
 	error = None
-
 	if(data):
 		error = "This user already exists"
-		return render_template('signup.html')
+		#debug
+		return render_template('signup_customer.html')
 	else:
-		ins = 'INSERT INTO customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, )'
-		cursor.execute(ins, (email, name, password, building, street, city, state, phone, pass_num, Pass_exp, passport_country, dob))
+		ins = 'INSERT INTO customer(email, name, password, building_number, street, city, state, phone_number, passport_number, passport_expiration, passport_country, date_of_birth) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+		
 
+		cursor.execute(ins, (email, name, password, building, street, city, state, phone, pass_num, Pass_exp, passport_country, date))
 		conn.commit()
 		cursor.close()
-		return render_template('index.html')
+		return render_template('signin.html')
 
 
 	@app.route('/showLogin')
@@ -55,6 +132,7 @@ def signUp():
 
 	@app.route('/SignIn')
 	def SignIn():
+		print('ENTER SignIn')
 		email = request.form['Sign_email']
 		password = request.form['Sign_password']
 		cursor = conn.cursor()
