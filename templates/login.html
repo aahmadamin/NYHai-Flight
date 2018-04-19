@@ -31,17 +31,26 @@
         <h2>Sign In</h2>
         <br>
 
-        <form class="form-signin">
-                    
-          <label for="inputEmail" class="sr-only">Email Address</label>
-          <input type="Sign_email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
+        <form action="/Login" class="form-signin">
+
+          <label for="input_type" class="">Who are you?</label>
+          <select class="form-control" id = 'input_type' name="type_user">
+            <option>Customer</option>
+            <option>Airline Staff</option>
+            <option>Booking Agent</option>
+          </select>     
+
+          <label for="inputEmail" class="">Email Address</label>
+          <input type="Sign_email" name="Sign_email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
   
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="Sign_password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+          <label for="inputPassword" class="">Password</label>
+          <input type="Sign_password" name="Sign_password" id="inputPassword" class="form-control" placeholder="Password" required>
+          
+          <input class="btn btn-lg btn-primary btn-block" type="submit" value="Register">
           <br>
 
                    
-        <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Enter</button>
+        
       </form>
       </div>
  

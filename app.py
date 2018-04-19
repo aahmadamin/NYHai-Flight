@@ -26,11 +26,15 @@ def Usertype_redirect():
 		return render_template('signup_bookingagent.html')
 	# return render_template('signup_customer.html')
 
+@app.route('/showLogin', methods=['GET', "POST"])
+def showLogin():
+	return render_template('login.html')
+
 @app.route('/Login', methods=['GET', "POST"])
 def Login():
-	type_user = request.form['user_email']
-	name = request.form['Sign']
-	passw = request.form['password']
+	type_user = request.form['type_user']
+	name = request.form['Sign_email']
+	passw = request.form['Sign_password']
 	cursor = conn.cursor()
 
 	if type_user == 'Customer':
@@ -45,7 +49,7 @@ def Login():
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
-	elif type_user='Booking Agent':
+	elif type_user=='Booking Agent':
 		query = 'SELECT * FROM booking_agent WHERE email = %s and password = %s'
 		cursor.execute(query, (name, password))
 		data = cursor.fetchone()
@@ -57,7 +61,7 @@ def Login():
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
-	elif type_user='Airline Staff':
+	elif type_user=='Airline Staff':
 		query = 'SELECT * FROM airline_staff WHERE username = %s and password = %s'
 		cursor.execute(query, (name, password))
 		data = cursor.fetchone()
