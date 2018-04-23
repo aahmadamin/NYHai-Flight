@@ -15,6 +15,7 @@ def main():
 def ShowUsertype():
 
 	return render_template('signup_usertype.html')
+#author: Artem
 @app.route('/Usertype_redirect', methods=['POST'])
 def Usertype_redirect():
 	user = request.form['type_user']
@@ -26,10 +27,11 @@ def Usertype_redirect():
 		return render_template('signup_bookingagent.html')
 	# return render_template('signup_customer.html')
 
+#author: Artem
 @app.route('/showLogin', methods=['GET', "POST"])
 def showLogin():
 	return render_template('login.html')
-
+#author: Artem
 @app.route('/Login', methods=['GET', "POST"])
 def Login():
 	type_user = request.form['type_user']
@@ -38,20 +40,21 @@ def Login():
 	cursor = conn.cursor()
 
 	if type_user == 'Customer':
-		query = 'SELECT * FROM customer WHERE username = %s and password = %s'
-		cursor.execute(query, (name, password))
+		query = 'SELECT * FROM customer WHERE email = %s and password = %s'
+		cursor.execute(query, (name, passw))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
 		if(data):
 			session['email'] = name
+
 			return redirect(url_for('home_customer.html'))
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
 	elif type_user=='Booking Agent':
 		query = 'SELECT * FROM booking_agent WHERE email = %s and password = %s'
-		cursor.execute(query, (name, password))
+		cursor.execute(query, (name, passw))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
@@ -63,7 +66,7 @@ def Login():
 			return render_template('login.html', error=error)
 	elif type_user=='Airline Staff':
 		query = 'SELECT * FROM airline_staff WHERE username = %s and password = %s'
-		cursor.execute(query, (name, password))
+		cursor.execute(query, (name, passw))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
@@ -76,20 +79,20 @@ def Login():
 
 
 
-
+#author: Artem
 @app.route('/showSignUpCustomer')
 def showSignUpCustomer():
 
 	return render_template('signup_customer.html')
-
+#author: Artem
 @app.route('/ShowSignUpStaff')
 def ShowSignUpStaff():
 	return render_template('signup_staff.html')
-
+#author: Artem
 @app.route('/ShowSignUpAgent')
 def ShowSignUpAgent():
 	return render_template('signup_agent.html')
-
+#author: Artem
 @app.route('/signUpAgent', methods=['GET', 'POST'])
 def signUpAgent():
 	email = request.form['email']
@@ -113,7 +116,7 @@ def signUpAgent():
 		conn.commit()
 		cursor.close()
 		return render_template('signin.html')
-
+#author: Artem
 @app.route('/signUpStaff', methods=['GET', 'POST'])
 def signUpStaff():
 	username = request.form['username']
@@ -139,13 +142,21 @@ def signUpStaff():
 		conn.commit()
 		cursor.close()
 		return render_template('signin.html')
-
+#author: Artem
 @app.route('/signUpCustomer', methods=['GET','POST'])
 def signUpCustomer():
 	email = request.form['inputEmail']
+
 	password = request.form['inputPassword']
+
 	name = request.form['inputName']
+
 	date = request.form['dob']
+	#ERROR DOB retirns bad request
+	
+
+	#ERROR DOB retirns bad request
+	
 	building = request.form['building']
 	street = request.form['inputStreet']
 	city = request.form['inputCity']
@@ -155,7 +166,6 @@ def signUpCustomer():
 	pass_num = request.form['inputPass_num']
 	Pass_exp = request.form['inputPass_exp']
 
-	#ERROR DOB retirns bad request
 	
 	#date = '0002-02-22'
 	cursor = conn.cursor()
@@ -165,7 +175,7 @@ def signUpCustomer():
 	error = None
 	if(data):
 		error = "This user already exists"
-		#debug
+		# EDIT ADD ERROR MESSAGE
 		return render_template('signup_customer.html')
 	else:
 		ins = 'INSERT INTO customer(email, name, password, building_number, street, city, state, phone_number, passport_number, passport_expiration, passport_country, date_of_birth) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
@@ -174,7 +184,7 @@ def signUpCustomer():
 		cursor.execute(ins, (email, name, password, building, street, city, state, phone, pass_num, Pass_exp, passport_country, date))
 		conn.commit()
 		cursor.close()
-		return render_template('signin.html')
+		return render_template('index.html')
 
 
 	@app.route('/showLogin')
@@ -201,7 +211,7 @@ def signUpCustomer():
 		else:
 			error = 'Invalid login or username'
 			return render_template('login.html', error=error)
-
+#author: Amin
 @app.route('/profileCustomer', methods=['GET','POST'])
 def profileCustomer():
 	email = session['email']
@@ -213,4 +223,4 @@ def profileCustomer():
 	return render_template('home_customer.html', username=email, flights=data)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
