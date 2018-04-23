@@ -35,13 +35,14 @@ def showLogin():
 @app.route('/Login', methods=['GET', "POST"])
 def Login():
 	type_user = request.form['type_user']
-	name = request.form['Sign_email']
-	passw = request.form['Sign_password']
+	email = request.form['Sign_email']
+	password = request.form['Sign_password']
 	cursor = conn.cursor()
 
 	if type_user == 'Customer':
-		query = 'SELECT * FROM customer WHERE email = %s and password = %s'
-		cursor.execute(query, (name, passw))
+
+		query = "SELECT * FROM customer WHERE email = %s and password = %s"
+		cursor.execute(query, (email, password))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
@@ -49,29 +50,32 @@ def Login():
 			session['email'] = name
 
 			return redirect(url_for('home_customer.html'))
+
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
 	elif type_user=='Booking Agent':
 		query = 'SELECT * FROM booking_agent WHERE email = %s and password = %s'
-		cursor.execute(query, (name, passw))
+
+		cursor.execute(query, (email, password))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
 		if(data):
-			session['email'] = name
+			session['email'] = email
 			return redirect(url_for('home_agent.html'))
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
 	elif type_user=='Airline Staff':
-		query = 'SELECT * FROM airline_staff WHERE username = %s and password = %s'
-		cursor.execute(query, (name, passw))
+
+		query = 'SELECT * FROM airline_staff WHERE email = %s and password = %s'
+		cursor.execute(query, (email, password))
 		data = cursor.fetchone()
 		cursor.close()
 		error=None
 		if(data):
-			session['email'] = name
+			session['email'] = email
 			return redirect(url_for('home_staff.html'))
 		else:
 			error = 'Invalid login or password'
@@ -221,6 +225,8 @@ def profileCustomer():
 	data=cursor.fetchall()
 	cursor.close()
 	return render_template('home_customer.html', username=email, flights=data)
+
+app.secret_key = 'some key that you will never guess'
 
 if __name__ == "__main__":
     app.run(debug=True)
