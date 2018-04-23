@@ -38,7 +38,7 @@ def Login():
 	cursor = conn.cursor()
 
 	if type_user == 'Customer':
-		query = "SELECT * FROM customer WHERE email = '%s' and password = '%s'"
+		query = "SELECT * FROM customer WHERE email = %s and password = %s"
 		cursor.execute(query, (email, password))
 		data = cursor.fetchone()
 		cursor.close()
