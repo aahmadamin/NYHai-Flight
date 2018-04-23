@@ -47,9 +47,9 @@ def Login():
 		cursor.close()
 		error=None
 		if(data):
-			session['email'] = name
+			session['email'] = email
 
-			return redirect(url_for('home_customer.html'))
+			return redirect(url_for('profileCustomer'))
 
 		else:
 			error = 'Invalid login or password'
@@ -63,7 +63,7 @@ def Login():
 		error=None
 		if(data):
 			session['email'] = email
-			return redirect(url_for('home_agent.html'))
+			return redirect(url_for('profileAgent'))
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
@@ -76,7 +76,7 @@ def Login():
 		error=None
 		if(data):
 			session['email'] = email
-			return redirect(url_for('home_staff.html'))
+			return redirect(url_for('profileStaff'))
 		else:
 			error = 'Invalid login or password'
 			return render_template('login.html', error=error)
@@ -221,7 +221,7 @@ def profileCustomer():
 	email = session['email']
 	cursor = conn.cursor()
 	query = 'SELECT flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases WHERE customer_email = %s'
-	cursor.execute (query)
+	cursor.execute (query, (email))
 	data=cursor.fetchall()
 	cursor.close()
 	return render_template('home_customer.html', username=email, flights=data)
