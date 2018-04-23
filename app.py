@@ -225,6 +225,21 @@ def profileCustomer():
 	data=cursor.fetchall()
 	cursor.close()
 	return render_template('home_customer.html', username=email, flights=data)
+#author: Amin
+@app.route('/profileAgent', methods=['GET','POST'])
+def profileAgent():
+	email = session['email']
+	cursor = conn.cursor()
+	query = 'SELECT customer.email, customer.name, customer.password, flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases, customer, booking_agent WHERE customer.email = purchases.customer_email AND purchases.booking_agent_id = booking_agent.booking_agent_id AND booking_agent.email = %s'
+	cursor.execute (query, (email))
+	data=cursor.fetchall()
+	cursor.close()
+	return render_template('home_agent.html', username=email, flights=data)
+#author: Amin
+@app.route('/logout')
+def logout():
+	session.pop('email')
+	return redirect('/')
 
 app.secret_key = 'some key that you will never guess'
 

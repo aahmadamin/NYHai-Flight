@@ -22,7 +22,7 @@
           <ul class="nav nav-pills pull-right">
             <li role="presentation" ><a href="main">Home</a></li> &ensp;
             <li role="presentation" class="active"><a href="#">Profile</a></li> &ensp;
-            <li role="presentation"><a href="#">Logout</a></li> &ensp;
+            <li role="presentation"><a href="/logout">Logout</a></li> &ensp;
           </ul>
         </nav>
         <h3 class="text-muted">NYU Airlines</h3>
@@ -46,13 +46,13 @@
 
     {% for line in flights %}
       <tr>
-        <td>{{line.flight.airline_name}}</td>
-        <td>{{line.flight.flight_num}}</td>
-        <td>{{line.flight.departure_airport}}</td>
-        <td>{{line.flight.departure_time}}</td>
-        <td>{{line.flight.arrival_airport}}</td>
-        <td>{{line.flight.arrival_time}}</td>
-        <td>{{line.flight.status}}</td>
+        <td>{{line.airline_name}}</td>
+        <td>{{line.flight_num}}</td>
+        <td>{{line.departure_airport}}</td>
+        <td>{{line.departure_time}}</td>
+        <td>{{line.arrival_airport}}</td>
+        <td>{{line.arrival_time}}</td>
+        <td>{{line.status}}</td>
       </tr>
     {% endfor %}
     </table>
