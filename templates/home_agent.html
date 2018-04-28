@@ -11,6 +11,7 @@
     <link href="../static/signup.css" rel="stylesheet">
     <script /static/js/jquery.js"> </script>
     <script /static/js/signUp.js"></script>
+    <script src='static/js/Chart.min.js'></script>
     
   </head>
  
@@ -30,7 +31,6 @@
       <div class="jumbotron">
         <h4>You are logged in as: {{username}}</h4>
         <h2>My Flights</h2>
-        <br>
 
     <div class="table-responsive">
 
@@ -61,8 +61,115 @@
       </tr>
     {% endfor %}
     </table>
+        <h2>My Commission</h2>
+        <form action="/profileAgentDates" method="POST" class="dates-commission">
+          <label for="inputFrom" class="">From</label>
+          <input type="date" style="width: 160px" name="inputFrom" id="inputFrom" class="form-control" placeholder="From" required>
+
+          <label for="inputTo" class="">To</label>
+          <input type="date" style="width: 160px" name="inputTo" id="inputTo" class="form-control" placeholder="To" required>
+
+          <input class="btn btn-primary btn-sm" type="submit" value="Confirm">
+          <br>
+        </form>
+        <br>
+
+    <div class="table-responsive">
+
+    <table class='table'>
+      <th>Tickets Sold</th>
+      <th>Total Commission</th>
+      <th>Average Commission</th>  
+
+    {% for line in commission %}
+      <tr>
+        <td>{{line.tickets_sold}}</td>
+        <td>{{line.total_commission}}</td>
+        <td>{{line.average_commission}}</td>  
+      </tr>
+    {% endfor %}
+    </table>
+    </div>
+
+    <h2>Top 5 Customers</h2>
+    <h4>based on number of tickets bought in last 6 months</h4>
+    <canvas id="chart" width="600" height="400"></canvas>
+    <script>
+      // bar chart data
+      var barData = {
+      labels : [{% for item in labels %}
+                      "{{item}}",
+                  {% endfor %}],
+      datasets : [
+          {
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+            data : [{% for item in values %}
+                          {{item}},
+                        {% endfor %}]
+          }
+          ]
+      }
+ 
+      // get bar chart canvas
+      var mychart = document.getElementById("chart").getContext("2d");
+ 
+      steps = 10
+      max = "{{maxTickets}}"
+      // draw bar chart
+      new Chart(mychart).Bar(barData, {
+            scaleOverride: true,
+            scaleSteps: steps,
+            scaleStepWidth: Math.ceil(max / steps),
+            scaleStartValue: 0,
+            scaleShowVerticalLines: true,
+            scaleShowGridLines : true,
+            barShowStroke : true,
+            scaleShowLabels: true
+      });
+ 
+    </script>
+        <h2>Top 5 Customers</h2>
+    <h4>based on commission received in last 12 months</h4>
+    <canvas id="chart" width="600" height="400"></canvas>
+    <script>
+      // bar chart data
+      var barData = {
+      labels : [{% for item in labels %}
+                      "{{item}}",
+                  {% endfor %}],
+      datasets : [
+          {
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+            data : [{% for item in values %}
+                          {{item}},
+                        {% endfor %}]
+          }
+          ]
+      }
+ 
+      // get bar chart canvas
+      var mychart = document.getElementById("chart").getContext("2d");
+ 
+      steps = 10
+      max = "{{maxTickets}}"
+      // draw bar chart
+      new Chart(mychart).Bar(barData, {
+            scaleOverride: true,
+            scaleSteps: steps,
+            scaleStepWidth: Math.ceil(max / steps),
+            scaleStartValue: 0,
+            scaleShowVerticalLines: true,
+            scaleShowGridLines : true,
+            barShowStroke : true,
+            scaleShowLabels: true
+      });
+ 
+    </script>
   </div>
-</div>
 
   </body>
 </html>
