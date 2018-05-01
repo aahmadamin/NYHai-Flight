@@ -34,7 +34,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> 
+                        <a class="nav-link" href="./logout"> 
                             <span class="fa fa-list fa-lg"></span> Log Out</a>
                     </li>
                 </ul>            
@@ -172,13 +172,13 @@
 
             <table class='table'>
               <th>Agent ID</th>
-              <th>Agent Email</th>
+              <th>Sold</th>
               
 
             {% for line in agents_month %}
               <tr>
                 <td>{{line.booking_agent_id}}</td>
-                <td>{{line.email}}</td>
+                <td>{{line.sold}}</td>
                 
               </tr>
             {% endfor %}
@@ -190,13 +190,35 @@
 
             <table class='table'>
               <th>Agent ID</th>
-              <th>Agent Email</th>
+              <th>Sold</th>
               
 
             {% for line in agents_year %}
               <tr>
                 <td>{{line.booking_agent_id}}</td>
-                <td>{{line.email}}</td>
+                <td>{{line.sold}}</td>
+                
+              </tr>
+            {% endfor %}
+            </table>
+          </div>
+
+
+          <div class="panel-body">
+                            <h3>Top agents by comission in the past year</h3>
+
+
+                <div class="table-responsive">
+
+            <table class='table'>
+              <th>Agent ID</th>
+              <th>Sold</th>
+              
+
+            {% for line in comission %}
+              <tr>
+                <td>{{line.booking_agent_id}}</td>
+                <td>{{line.sold}}</td>
                 
               </tr>
             {% endfor %}

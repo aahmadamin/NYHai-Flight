@@ -425,15 +425,15 @@ def profileStaff():
 	flights = cursor.fetchall()
 
 
-	queryAgentsm = 'SELECT booking_agent_id, count(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 month) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
+	queryAgentsm = 'SELECT booking_agent_id, count(ticket_id) as sold from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 month) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
 	cursor.execute(queryAgentsm, (email))
 	agents_purchase_month = cursor.fetchall()
 
-	queryAgentsy = 'SELECT booking_agent_id, count(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
+	queryAgentsy = 'SELECT booking_agent_id, count(ticket_id) as sold from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
 	cursor.execute(queryAgentsy, (email))
 	agents_purchase_year = cursor.fetchall()
 
-	queryComission = "SELECT booking_agent_id, sum(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5"
+	queryComission = "SELECT booking_agent_id, sum(price) as sold from booking_agent natural join purchases natural join ticket natural join flight where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5"
 	cursor.execute(queryComission, (email))
 	agents_comission = cursor.fetchall()
 
