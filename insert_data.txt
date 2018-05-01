@@ -1,0 +1,32 @@
+CUSTOMER EMAILS:
+
+123@ww.rf
+123@ww.rfa
+aaa@mm.ru
+saffsa@fds.com
+
+INSERT INTO `airline_staff`(`username`, `password`, `first_name`, `last_name`, `date_of_birth`, `airline_name`) VALUES ('Staff1', '123', 'John', 'Doe', '2000-10-10', 'Airline 1'), ('Staff2', '123', 'Mary', 'Doe', '2004-10-10', 'Airline 1'), ('Staff4', '123', 'Frank', 'Doe', '2002-10-10', 'Airline 2'), ('Staff3', '123', 'John', 'Doe', '2000-10-10', 'Airline 2')
+
+INSERT INTO `airplane`(`airline_name`, `airplane_id`, `seats`) VALUES ('Airline 1', '000', '100'), ('Airline 1', '001', '150'), ('Airline 2', '002', '200'), ('Airline 2', '004', '220'), ('Airline 2', '000', '222')
+
+INSERT INTO `airport`(`airport_name`, `airport_city`) VALUES ('PVG', 'Shanghai'), ('JFK', 'New York'), ('SVT', 'Moscow')
+
+INSERT INTO `booking_agent`(`email`, `password`, `booking_agent_id`) VALUES ('Agent1', '123', '0001'), ('Agent2', '1234', '0002'), ('Agent3', '1234', '0003'), ('Agent4', '1234', '0004'), ('Agent5', '1234', '0005')
+
+
+
+INSERT INTO `flight`(`airline_name`, `flight_num`, `departure_airport`, `departure_time`, `arrival_airport`, `arrival_time`, `price`, `status`, `airplane_id`) VALUES ('Airline 1', '1', 'JFK', '2015-04-11 23:30:00', 'PVG', '2015-04-12 06:30:00', '900', 'IN PROGRESS', '001'), ('Airline 2', '2', 'PVG', '2018-03-11 23:30:00', 'JFK', '2015-03-12 06:30:00', '800', 'DELAYED', '002'), ('Airline 1', '3', 'JFK', '2015-01-11 23:30:00', 'SVT', '2015-01-12 06:30:00', '500', 'ON TIME', '000'),('Airline 2', '4', 'PVG', '2015-08-11 23:30:00', 'SVT', '2015-08-12 06:30:00', '900', 'IN PROGRESS', '004')
+
+INSERT INTO `ticket`(`ticket_id`, `airline_name`, `flight_num`) VALUES ('15', 'Airline 1', '1'), ('16', 'Airline 1', '3'), ('17', 'Airline 2', '2'), ('18', 'Airline 2', '4'), ('19', 'Airline 1', '1'), ('20', 'Airline 1', '1'), ('21', 'Airline 2', '2') 
+
+INSERT INTO `purchases`(`ticket_id`, `customer_email`, `booking_agent_id`, `purchase_date`) VALUES ('15', '123@ww.rf', NULL, '2014-12-12 00:00:30'), 
+('16', '123@ww.rf', NULL, '2014-10-12 00:10:30'), 
+('20', '123@ww.rf', '0002', '2014-11-12 00:00:30'), 
+('20', '123@ww.rfa', '0002', '2014-12-12 00:00:30'), 
+('20', 'aaa@mm.ru', '0002', '2014-12-13 00:00:30'), 
+('21', 'aaa@mm.ru', '0003', '2014-05-05 20:00:30'), 
+('15', 'saffsa@fds.com', '0004', '2014-12-14 00:00:30'),
+('21', '123@ww.rf', '0004', '2014-12-15 00:00:30')
+
+  
+
