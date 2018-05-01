@@ -736,8 +736,107 @@ def profileAgent():
 	cursor.close()
 	return render_template('home_agent.html', username = email, flights = data, commission = data2, labels = labels , values = values, maxTickets = maxTickets)
 #author: Amin
-# @app.route('/profileAgentDates', methods=['GET','POST'])
-# def profileAgentDates():
+@app.route('/profileAgentDates', methods=['GET','POST'])
+def profileAgentDates():
+	email = session['email']
+	commissionFrom = request.form['inputFrom']
+	commissionTo = request.form['inputTo']
+	now = datetime.datetime.now()
+	nowDay = str(now.day)
+	if len(nowDay) == 1:
+		nowDay = '0' + nowDay
+	nowMonth = str(now.month)
+	if len(nowMonth) == 1:
+		nowMonth = '0' + nowMonth
+	nowYear = str(now.year)
+	to = nowYear + '-' + nowMonth + '-' + nowDay
+	if nowMonth == '01':
+		fromMonth = '12'
+		fromYear = str(int(nowYear)-1)
+	else:
+		fromMonth = str(int(nowMonth)-1)
+		fromYear = nowYear
+	if len(fromMonth) == 1:
+		fromMonth = '0' + fromMonth
+	fromm = fromYear + '-' + fromMonth + '-' + nowDay
+	# print(fromm)
+	# print(type(fromm))
+	# print(to)
+	# print(type(to))
+	cursor = conn.cursor()
+	query = 'SELECT customer.email, customer.name, customer.password, flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases, customer, booking_agent WHERE customer.email = purchases.customer_email AND purchases.booking_agent_id = booking_agent.booking_agent_id AND booking_agent.email = %s'
+	cursor.execute (query, (email))
+	data=cursor.fetchall()
+
+	query2 = 'SELECT tickets_sold, total_commission, total_commission/tickets_sold AS average_commission FROM (SELECT COUNT(ticket_id) AS tickets_sold, SUM(price)/10 AS total_commission FROM flight NATURAL JOIN ticket NATURAL JOIN purchases NATURAL JOIN booking_agent WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s) AS t1'
+	cursor.execute (query2, (email, commissionFrom, commissionTo))
+	data2=cursor.fetchall()
+
+	labels = []
+	values = []
+	months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+	sixMonthIndex = months.index(nowMonth)-6
+	fromSixMonth = months[sixMonthIndex]
+	if sixMonthIndex < 0:
+		fromSixYear = str(int(nowYear)-1)
+	else:
+		fromSixYear = nowYear
+	if len(fromSixMonth) == 1:
+		fromMonth = '0' + fromMonth
+	fromSix = fromSixYear + '-' + fromSixMonth + '-' + nowDay
+	query3 = 'SELECT customer_email, num_tickets FROM (SELECT customer_email, COUNT(ticket_id) AS num_tickets FROM purchases NATURAL JOIN booking_agent WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s GROUP BY customer_email ORDER BY num_tickets DESC) as t1 LIMIT 5'
+	cursor.execute (query3, (email, fromSix, to))
+	data3=cursor.fetchall()
+	for entry in data3:
+		for e in entry:
+			if e == 'customer_email':
+				labels.append(entry[e])
+			elif e == 'num_tickets':
+				values.append(entry[e])
+	# print(labels, values)
+	try:
+		maxTickets = max(values)
+	except ValueError:
+		maxTickets = 10
+
+	cursor.close()
+	return render_template('home_agent.html', username = email, flights = data, commission = data2, labels = labels , values = values, maxTickets = maxTickets)
+#author: Amin
+@app.route('/profileAgent2', methods=['GET','POST'])
+def profileAgent2():
+	email = session['email']
+	now = datetime.datetime.now()
+	nowDay = str(now.day)
+	if len(nowDay) == 1:
+		nowDay = '0' + nowDay
+	nowMonth = str(now.month)
+	if len(nowMonth) == 1:
+		nowMonth = '0' + nowMonth
+	nowYear = str(now.year)
+	to = nowYear + '-' + nowMonth + '-' + nowDay
+	fromTwelveYear = str(int(nowYear)-1)
+	# print(fromTwelveYear)
+	fromTwelve = fromTwelveYear + '-' + nowMonth + '-' + nowDay
+	cursor = conn.cursor()
+	query4 = 'SELECT * FROM (SELECT customer_email, SUM(price/10) as commission FROM purchases NATURAL JOIN booking_agent NATURAL JOIN ticket NATURAL JOIN flight WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s GROUP BY customer_email ORDER BY commission DESC) as t1 LIMIT 5'
+	cursor.execute (query4, (email, fromTwelve, to))
+	data4=cursor.fetchall()
+	labels = []
+	values = []
+	for entry in data4:
+		for e in entry:
+			if e == 'customer_email':
+				labels.append(entry[e])
+			elif e == 'commission':
+				values.append(entry[e])
+	# print(labels, values)
+	try:
+		maxCommission = max(values)
+	except ValueError:
+		maxCommission = 10
+
+	cursor.close()
+	return render_template('home_agent2.html', username = email, labels = labels , values = values, maxCommission = maxCommission)
 #author: Amin
 @app.route('/logout')
 def logout():

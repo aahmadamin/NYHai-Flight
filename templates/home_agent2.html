@@ -31,69 +31,9 @@
  
       <div class="jumbotron">
         <h4>You are logged in as: {{username}}</h4>
-        <h2>My Flights</h2>
-
-    <div class="table-responsive">
-
-    <table class='table'>
-      <th>Traveler's Email</th>
-      <th>Traveler's Name</th>
-      <th>Traveler's Password</th>
-      <th>Airline Name</th>
-      <th>Flight Number</th>
-      <th>Departure Airport</th>
-      <th>Departure Time</th>
-      <th>Arrival Airport</th>
-      <th>Arrival Time</th>
-      <th>Flight Status</th>
-
-    {% for line in flights %}
-      <tr>
-        <td>{{line.email}}</td>
-        <td>{{line.name}}</td>
-        <td>{{line.password}}</td>
-        <td>{{line.airline_name}}</td>
-        <td>{{line.flight_num}}</td>
-        <td>{{line.departure_airport}}</td>
-        <td>{{line.departure_time}}</td>
-        <td>{{line.arrival_airport}}</td>
-        <td>{{line.arrival_time}}</td>
-        <td>{{line.status}}</td>
-      </tr>
-    {% endfor %}
-    </table>
-        <h2>My Commission</h2>
-        <form action="/profileAgentDates" method="POST" class="dates-commission">
-          <label for="inputFrom" class="">From</label>
-          <input type="date" style="width: 160px" name="inputFrom" id="inputFrom" class="form-control" placeholder="From" required>
-
-          <label for="inputTo" class="">To</label>
-          <input type="date" style="width: 160px" name="inputTo" id="inputTo" class="form-control" placeholder="To" required>
-
-          <input class="btn btn-primary btn-sm" type="submit" value="Confirm">
-          <br>
-        </form>
-        <br>
-
-    <div class="table-responsive">
-
-    <table class='table'>
-      <th>Tickets Sold</th>
-      <th>Total Commission</th>
-      <th>Average Commission</th>  
-
-    {% for line in commission %}
-      <tr>
-        <td>{{line.tickets_sold}}</td>
-        <td>{{line.total_commission}}</td>
-        <td>{{line.average_commission}}</td>  
-      </tr>
-    {% endfor %}
-    </table>
-    </div>
 
     <h2>Top 5 Customers</h2>
-    <h4>based on number of tickets bought in last 6 months</h4>
+    <h4>based on commission received in last 12 months</h4>
     <canvas id="chart" width="600" height="400"></canvas>
     <script>
       // bar chart data
@@ -117,7 +57,7 @@
       var mychart = document.getElementById("chart").getContext("2d");
  
       steps = 10
-      max = "{{maxTickets}}"
+      max = "{{maxCommission}}"
       // draw bar chart
       new Chart(mychart).Bar(barData, {
             scaleOverride: true,
@@ -134,8 +74,8 @@
     </script>
     <br>
     <br>
-    <form action="/profileAgent2" method="POST" class="next-graph">
-          <input class="btn btn-primary btn-xs" type="submit" value="Next Page >">
+    <form action="/profileAgent" method="POST" class="previous-graph">
+          <input class="btn btn-primary btn-xs" type="submit" value="< Previous Page">
           <br>
         </form>
 
