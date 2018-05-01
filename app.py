@@ -396,7 +396,7 @@ def profileAgent():
 				labels.append(entry[e])
 			elif e == 'num_tickets':
 				values.append(entry[e])
-	print(labels, values)
+	# print(labels, values)
 	try:
 		maxTickets = max(values)
 	except ValueError:
@@ -410,8 +410,9 @@ def profileAgent():
 #author: Amin
 @app.route('/logout')
 def logout():
-	session.pop('email')
-	return redirect('/')
+	email = session['email']
+	session.pop(email, None)
+	return redirect('/showLogin')
 
 app.secret_key = 'some key that you will never guess'
 
