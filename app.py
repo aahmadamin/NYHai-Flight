@@ -407,10 +407,17 @@ def customers_flights():
 	flight = cursor.fetchall()
 	return render_template('search_cus_flight.html', username = username,  flights = flight, customer_name = email, curr_line = cur_line)
 
+def curr_line(email):
+	q = 'select airline_name from airline_staff where username = %s'
+	cursor = conn.cursor()
+	cursor.execute(q, (email))
 
+	ln = cursor.fetchone()
+	return ln['airline_name']
 #author: Artem
 @app.route('/profileStaff', methods=['GET', 'POST'])
 def profileStaff():
+	
 	email = session['email']
 	cursor = conn.cursor()
 	queryFlights = 'SELECT flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight natural join airline_staff where airline_staff.username = %s and flight.departure_time < date(now() + interval 30 day) and flight.departure_time > date(now()) '
@@ -418,15 +425,15 @@ def profileStaff():
 	flights = cursor.fetchall()
 
 
-	queryAgentsm = 'SELECT booking_agent_id, count(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 month) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
+	queryAgentsm = 'SELECT booking_agent_id, count(ticket_id) as sold from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 month) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
 	cursor.execute(queryAgentsm, (email))
 	agents_purchase_month = cursor.fetchall()
 
-	queryAgentsy = 'SELECT booking_agent_id, count(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
+	queryAgentsy = 'SELECT booking_agent_id, count(ticket_id) as sold from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5'
 	cursor.execute(queryAgentsy, (email))
 	agents_purchase_year = cursor.fetchall()
 
-	queryComission = "SELECT booking_agent_id, sum(ticket_id) from booking_agent natural join purchases natural join ticket where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5"
+	queryComission = "SELECT booking_agent_id, sum(price) as sold from booking_agent natural join purchases natural join ticket natural join flight where purchases.purchase_date > date(now() - interval 1 year) and ticket.airline_name = (select airline_name from airline_staff where username= %s)  group by booking_agent_id  order by count(ticket_id) desc limit 5"
 	cursor.execute(queryComission, (email))
 	agents_comission = cursor.fetchall()
 
@@ -479,8 +486,9 @@ def profileStaff():
 	pie_labelsM = ['Direct', 'Agent']
 	pie_valuesM = [1568, 7896]
 	pie_labelsY = ['Direct', 'Agent']
-	pie_valuesY = []
-
+	pie_valuesY = [123456, 2222]
+	return render_template('home_staff.html', username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors),
+		for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000)
 	# labels = [
 	# 'JAN', 'FEB', 'MAR', 'APR',
 	# 'MAY', 'JUN', 'JUL', 'AUG',
@@ -511,9 +519,8 @@ def profileStaff():
 
 	for row in revMdirect:
 		for col in row:
-			pie_valuesM.append(col)
+			pie_valuesM.append(row[col])
 
-	
 
 	queryRevMagent = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is not Null and departure_time > date(now() - interval 1 month) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
 	cursor.execute(queryRevMagent, (email))
@@ -521,7 +528,7 @@ def profileStaff():
 
 	for row in revMagent:
 		for col in row:
-			pie_valuesM.append(col)
+			pie_valuesM.append(row[col])
 
 	queryRevYdirect = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is Null and departure_time > date(now() - interval 1 year ) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
 
@@ -534,16 +541,133 @@ def profileStaff():
 
 	for row in revYdirect:
 		for col in row:
-			pie_valuesY.append(col)
+			pie_valuesY.append(row[col])
 
 	for row in revYagent:
 		for col in row:
-			pie_valuesY.append(col)
+			pie_valuesY.append(row[col])
+
+
+	# labels = ["January","February","March","April","May","June","July","August"]
+	# values = [10,9,8,7,6,4,7,8]
+	# colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"  ]
+	# return render_template('chart.html', set=zip(values, labels, colors))
+
+
+	return render_template('home_staff.html', set=zip(values, labels, colors), username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors),
+		for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000, labelsBar = labelsBar, valuesBar = valuesBar, stepsBar = stepsBar ,maxspendingBar = maxbuyBar)
+
+#author: artem
+@app.route('/profileStaffDates', methods=['GET', 'POST'])
+def profileStaffDates():
+	
+	email = session['email']
+	fromm = request.form['inputFrom']
+	# print(fromm)	
+	ln = curr_line(email)	
+	to = request.form['inputTo']
+	cursor = conn.cursor()
 
 
 
-	return render_template('home_staff.html', username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors),
-		for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000)
+	if fromm == '' and to != '':
+		query = 'SELECT count(ticket_id) as sold, extract(year from departure_time) as yr, monthname(departure_time) as mth, extract(YEAR_MONTH from departure_time) as dt from flight natural join ticket where departure_time <=%s  group by dt'
+
+
+		# where yr <= extract(year from %s) and mth <= extract(month from %s)'
+		cursor.execute(query, (to))
+		data = cursor.fetchall()
+		labels = []
+		values = []
+
+		
+		for i in data:
+			labels.append(str(i['mth']) + ' '+ str(i['yr']))
+			values.append(int(i['sold']))
+
+		steps = len(values)
+		if steps == 0:
+			maxbuy = 0
+		else:
+			maxbuy = int(max(values))
+		
+		return render_template('tickets_bar.html', username = email, curr_line = ln,labels = labels, values = values, steps = steps ,maxspending = maxbuy)
+
+
+		
+
+
+	elif to == '' and fromm!='':
+		query = 'SELECT count(ticket_id) as sold, extract(year from departure_time) as yr, monthname(departure_time) as mth, extract(YEAR_MONTH from departure_time) as dt from flight natural join ticket where departure_time >=%s  group by dt'
+
+
+		# where yr <= extract(year from %s) and mth <= extract(month from %s)'
+		cursor.execute(query, (fromm))
+		data = cursor.fetchall()
+		labels = []
+		values = []
+
+		
+		for i in data:
+			labels.append(str(i['mth']) + ' '+ str(i['yr']))
+			values.append(int(i['sold']))
+		steps = len(values)
+		if steps == 0:
+			maxbuy = 0
+		else:
+			maxbuy = int(max(values))
+
+
+		return render_template('tickets_bar.html', username = email, curr_line = ln,labels = labels, values = values, steps = steps ,maxspending = maxbuy)
+	elif fromm!='' and to !='':
+		query = 'SELECT count(ticket_id) as sold, extract(year from departure_time) as yr, monthname(departure_time) as mth, extract(YEAR_MONTH from departure_time) as dt from flight natural join ticket where departure_time between %s and  %s group by dt'
+
+
+		# where yr <= extract(year from %s) and mth <= extract(month from %s)'
+		cursor.execute(query, (fromm, to))
+		data = cursor.fetchall()
+		labels = []
+		values = []
+
+		
+		for i in data:
+			labels.append(str(i['mth']) + ' '+ str(i['yr']))
+			values.append(int(i['sold']))
+		steps = len(values)
+
+		if steps == 0:
+			maxbuy = 0
+		else:
+			maxbuy = int(max(values))
+
+
+		
+		return render_template('tickets_bar.html', username = email, curr_line = ln,labels = labels, values = values, steps = steps ,maxspending = maxbuy)
+	else:
+		#ALL FLIGHTS		
+		query = 'select count(ticket_id) as sold, extract(year from departure_time) as yr, monthname(departure_time) as mth, extract(YEAR_MONTH from departure_time) as dt from flight natural join ticket group by dt'
+		cursor.execute(query)
+		data = cursor.fetchall()
+		ii = ''
+		labels = []
+		values = []
+
+		
+		for i in data:
+			labels.append(str(i['mth']) + ' '+ str(i['yr']))
+			values.append(int(i['sold']))
+		steps = len(values)
+
+		if steps == 0:
+			maxbuy = 0
+		else:
+			maxbuy = int(max(values))
+
+
+		
+		return render_template('tickets_bar.html', username = email, curr_line = ln,labels = labels, values = values, steps = steps ,maxspending = maxbuy)
+
+
 
 
 #author: Amin

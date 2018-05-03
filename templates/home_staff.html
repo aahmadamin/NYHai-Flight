@@ -16,7 +16,7 @@
     <link href="../static/signup.css" rel="stylesheet">
     <script /static/js/jquery.js"> </script>
     <script /static/js/signUp.js"></script>
-    <script src='static/js/Chart.min.js'></script>
+ <script src='static/Chart.min.js'></script>   
 
     
   </head>
@@ -34,7 +34,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> 
+                        <a class="nav-link" href="./logout"> 
                             <span class="fa fa-list fa-lg"></span> Log Out</a>
                     </li>
                 </ul>            
@@ -49,16 +49,13 @@
 
 
 
-      <div id="accordion" class="panel-group">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Flights</a>
-            </h4>
-        </div>
-        <div id="collapseOne" class="panel-collapse collapse">
+     
+            <div id="collapseOne" class="container">
+            
+        
             <div class="panel-body">
-                                            <h3>Upcoming flights</h3>
+              
+              <h3>Upcoming flights</h3>
 
               <div class="table-responsive">
 
@@ -104,13 +101,8 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Planes</a>
-            </h4>
-        </div>
-        <div id="collapseTwo" class="panel-collapse collapse">
+    
+        <div id="collapseTwo" class="container">
             <div class="panel-body">
 
               <table class='table'>
@@ -139,15 +131,25 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Airports</a>
-            </h4>
-        </div>
-        <div id="collapseThree" class="panel-collapse collapse">
+    
+        <div id="collapseThree" class="container">
             <div class="panel-body">
+                <div class="table-responsive">
+
+            <table class='table'>
+              <th>Airport Name</th>
+              <th>Airport City</th>
+              
+
+            {% for line in all_airports %}
+              <tr>
+                <td>{{line.airport_name}}</td>
+                <td>{{line.airport_city}}</td>
                 
+              </tr>
+            {% endfor %}
+            </table>
+          </div>
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="ports">
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#add_new_airport">Add new airport</a>
@@ -160,13 +162,8 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Booking Agents</a>
-            </h4>
-        </div>
-        <div id="collapse4" class="panel-collapse collapse">
+    
+        <div id="collapse4" class="container">
             <div class="panel-body">
                             <h3>Top agents in the past month</h3>
 
@@ -175,13 +172,13 @@
 
             <table class='table'>
               <th>Agent ID</th>
-              <th>Agent Email</th>
+              <th>Sold</th>
               
 
             {% for line in agents_month %}
               <tr>
                 <td>{{line.booking_agent_id}}</td>
-                <td>{{line.email}}</td>
+                <td>{{line.sold}}</td>
                 
               </tr>
             {% endfor %}
@@ -193,13 +190,35 @@
 
             <table class='table'>
               <th>Agent ID</th>
-              <th>Agent Email</th>
+              <th>Sold</th>
               
 
             {% for line in agents_year %}
               <tr>
                 <td>{{line.booking_agent_id}}</td>
-                <td>{{line.email}}</td>
+                <td>{{line.sold}}</td>
+                
+              </tr>
+            {% endfor %}
+            </table>
+          </div>
+
+
+          <div class="panel-body">
+                            <h3>Top agents by comission in the past year</h3>
+
+
+                <div class="table-responsive">
+
+            <table class='table'>
+              <th>Agent ID</th>
+              <th>Sold</th>
+              
+
+            {% for line in comission %}
+              <tr>
+                <td>{{line.booking_agent_id}}</td>
+                <td>{{line.sold}}</td>
                 
               </tr>
             {% endfor %}
@@ -212,14 +231,8 @@
  -->              
             </div>
         </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">Customers</a>
-            </h4>
-        </div>
-        <div id="collapse5" class="panel-collapse collapse">
+    
+        <div id="collapse5" class="container">
             <div class="panel-body">
                 
                 <div class="table-responsive">
@@ -269,15 +282,9 @@
  -->              
             </div>
         </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse40">Top Destinations</a>
-            </h4>
-        </div>
-        <div id="collapse40" class="panel-collapse collapse">
+    
+        <div id="collapse40" class="container">
             <div class="panel-body">
               <h3>Top destinations in the past 3 months</h3>
                 <div class="table-responsive">
@@ -321,16 +328,10 @@
  -->              
             </div>
         </div>
-    </div>
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">Reports</a>
-            </h4>
-        </div>
-        <div id="collapse6" class="panel-collapse collapse">
+   
+        <div id="collapse6" class="container">
             <div class="panel-body">
                 
 
@@ -340,29 +341,91 @@
  -->              
             </div>
         </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">Revenue</a>
-            </h4>
-        </div>
-        <div id="collapse7" class="panel-collapse collapse">
+    
+        <div id="collapse7" class="container">
             <div class="panel-body">
                 
-            <h1>{{ title }}</h1>
+            <h2>Find flights for a range</h2>
+<form action="/profileStaffDates" method="POST" class="dates-spending">
+  <label for="inputFrom" class="">From</label>
+  <input type="date" style="width: 160px" name="inputFrom" id="inputFrom" class="form-control" placeholder="From" >
 
-    <canvas id="chart" width="600" height="400"></canvas>
-    <script>
-      
-    </script>
+  <label for="inputTo" class="">To</label>
+  <input type="date" style="width: 160px" name="inputTo" id="inputTo" class="form-control" placeholder="To" >
+
+  <input class="btn btn-primary btn-sm" type="submit" value="Confirm">
+  <br>
+</form>
+<br>
+
+
 <!--               
                     COMPARISONOF REVENUE(?)
 
  -->              
             </div>
-        </div>
+
+
+
+
+
+        <div class="piechartM">
+        <h3>Revenue Comparison for  a month</h3><!-- bar chart canvas element -->
+                        <canvas id="chartM" width="300" height="200"></canvas>
+            <script>
+               var pieData = [
+                        {% for item,label,colors in for_month %}
+                            {
+                                value: {{item}},
+                                label: "{{label}}",
+                                color : "{{colors}}"
+                            },
+                            {% endfor %}
+             
+             
+                     ];
+             
+               // get bar chart canvas
+               var mychart = document.getElementById("chartM").getContext("2d");
+             
+               steps = 10
+               max = 10
+               // draw pie chart
+               new Chart(document.getElementById("chartM").getContext("2d")).Pie(pieData);
+             
+            </script>
+          </div>
+
+          <div class="piechartY">
+        <h3>Revenue Comparison for  a year</h3><!-- bar chart canvas element -->
+                        <canvas id="chartY" width="300" height="200"></canvas>
+            <script>
+               var pieDataY = [
+                        {% for item,label,colors in for_year %}
+                            {
+                                value: {{item}},
+                                label: "{{label}}",
+                                color : "{{colors}}"
+                            },
+                            {% endfor %}
+             
+             
+                     ];
+             
+               // get bar chart canvas
+               var mychart = document.getElementById("chartY").getContext("2d");
+             
+               steps = 10
+               max = 10
+               // draw pie chart
+               new Chart(document.getElementById("chartY").getContext("2d")).Pie(pieDataY);
+             
+            </script>
+          </div>
+
+
+
     </div>
 
 
