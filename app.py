@@ -7,7 +7,7 @@ conn = pymysql.connect(host='localhost',
                        db='flight_booking',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
-@app.route('/')
+@app.route('/', methods=['GET', "POST"])
 def main():
 	return render_template('index.html')
 
@@ -961,6 +961,24 @@ def profileAgent2():
 
 	cursor.close()
 	return render_template('home_agent2.html', username = email, labels = labels , values = values, maxCommission = maxCommission)
+
+#author: Amin
+@app.route('/flightStatus', methods=['GET','POST'])
+def flightStatus():
+	airlineName = request.form['inputAirlineName']
+	flightNumber = request.form['inputFlightNumber']
+	departureDate = request.form['dat']
+	likeDepartureDtae = '%' + departureDate + '%'
+	cursor = conn.cursor()
+	query = 'SELECT flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight WHERE airline_name = %s AND flight_num = %s AND departure_time LIKE %s'
+	cursor.execute (query, (airlineName, flightNumber, likeDepartureDtae))
+	data=cursor.fetchall()
+	if (data):
+		return render_template('index.html', status = data)
+	else:
+		error = 'Invalid flight details'
+		return render_template('index.html', error=error)
+
 #author: Amin
 @app.route('/logout')
 def logout():
