@@ -18,7 +18,7 @@ def ShowUsertype():
 
 	return render_template('signup_usertype.html')
 #author: Artem
-@app.route('/Usertype_redirect', methods=['POST'])
+@app.route('/Usertype_redirect', methods=['POST', 'GET'])
 def Usertype_redirect():
 	user = request.form['type_user']
 	if user == 'Customer':
@@ -110,13 +110,13 @@ def ShowSignUpAgent():
 #author: Artem
 @app.route('/signUpAgent', methods=['GET', 'POST'])
 def signUpAgent():
-	email = request.form['email']
-	passw = request.form['password']
-	agentid = request.form['agentid']
+	email = request.form["1"]
+	passw = request.form["2"]
+	agentid = request.form["3"]
 
 	cursor = conn.cursor()
 	query = 'SELECT * FROM booking_agent WHERE email = %s'
-	cursor.execute (query, (email))
+	cursor.execute(query, (email))
 	data=cursor.fetchone()
 	error = None
 	if(data):
@@ -130,7 +130,7 @@ def signUpAgent():
 		cursor.execute(ins, (email, passw, agentid))
 		conn.commit()
 		cursor.close()
-		return render_template('signin.html')
+		return redirect(url_for('showLogin'))
 #author: Artem
 @app.route('/signUpStaff', methods=['GET', 'POST'])
 def signUpStaff():

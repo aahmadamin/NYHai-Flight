@@ -6,6 +6,8 @@
  
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/signup.css" rel="stylesheet">
@@ -20,9 +22,14 @@
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" ><a href="main">Home</a></li> &ensp;
-            <li role="presentation"><a href="#">Sign In</a></li> &ensp;
-            <li role="presentation" class="active"><a href="#">Sign Up</a></li> &ensp;
+            <ul class="nav nav-pills pull-right">
+                    <li role="presentation" ><a href="#">Home</a>
+                    </li>
+                    <li role="presentation"><a href="showLogin">Sign In</a>
+                    </li>
+                    <li role="presentation" class="active"><a href="showUsertype" class="active">Sign Up</a>
+                    </li>
+                </ul>
           </ul>
         </nav>
         <h3 class="text-muted">NYU Airlines</h3>
@@ -32,16 +39,16 @@
         <h2>Sign Up</h2>
         <br>
 
-        <form action="/signUpAgent" class="form-signin">
+        <form action="/signUpAgent" class="form-signin" method='POST'>
           
           <label for="email" class="sr-only">Email Address</label>
-          <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required autofocus>
+          <input type="email" name="1" id="email" class="form-control" placeholder="Email Address" required autofocus>
   
           <label for="password" class="sr-only">Password</label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+          <input type="password" name="2" id="password" class="form-control" placeholder="Password" required>
 
           <label for="agentid" class="sr-only">Booking Agent ID</label>
-          <input type="agentid" name="agentid" id="agentid" class="form-control" placeholder="Booking Agent ID" required>
+          <input type="agentid" name="3" id="agentid" class="form-control" placeholder="Booking Agent ID" required>
 
 
 
