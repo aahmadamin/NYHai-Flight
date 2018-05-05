@@ -10,7 +10,9 @@ conn = pymysql.connect(host='localhost',
 @app.route('/', methods=['GET', "POST"])
 def main():
 	return render_template('index.html')
-
+@app.route('/main', methods=['GET', "POST"])
+def show_index():
+	return render_template('index.html')
 @app.route('/showUsertype')
 def ShowUsertype():
 
@@ -540,7 +542,7 @@ def profileStaff():
 		# return render_template('home_staff.html', set=zip(values, labels, colors), username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors), for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000, labelsBar = labelsBar, valuesBar = valuesBar, stepsBar = stepsBar ,maxspendingBar = maxbuyBar)
 	else:
 		error = 'you are not logged in as staff'
-		return render_template('index.html')
+		return redirect(url_for('show_index'))
 
 #author: artem
 @app.route('/profileStaffDates', methods=['GET', 'POST'])
@@ -734,7 +736,7 @@ def profileCustomer():
 		cursor.close()
 		return render_template('home_customer.html', username=email, flights=data, labels=labels, values=values, maxSpending = maxSpending)
 	else:
-		return render_template('index.html')
+		return redirect(url_for('show_index'))
 
 #author: Amin
 @app.route('/profileCustomerDates', methods=['GET','POST'])
@@ -850,7 +852,7 @@ def profileAgent():
 		cursor.close()
 		return render_template('home_agent.html', username = email, flights = data, commission = data2, labels = labels , values = values, maxTickets = maxTickets)
 	else:
-		return render_template('index.html')
+		return redirect(url_for('show_index'))
 
 #author: Amin
 @app.route('/profileAgentDates', methods=['GET','POST'])
