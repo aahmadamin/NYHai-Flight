@@ -6,11 +6,13 @@
  
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/signup.css" rel="stylesheet">
-    <script /static/js/jquery.js"> </script>
-    <script /static/js/signUp.js"></script>
+    <script src="../static/js/jquery.js"> </script>
+    <script src="../static/js/signUp.js"></script>
     
   </head>
  
@@ -20,9 +22,14 @@
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" ><a href="main">Home</a></li> &ensp;
-            <li role="presentation"><a href="#">Sign In</a></li> &ensp;
-            <li role="presentation" class="active"><a href="#">Sign Up</a></li> &ensp;
+            <ul class="nav nav-pills pull-right">
+                    <li role="presentation" ><a href="#">Home</a>
+                    </li>
+                    <li role="presentation"><a href="showLogin">Sign In</a>
+                    </li>
+                    <li role="presentation" class="active"><a href="showUsertype" >Sign Up</a>
+                    </li>
+                </ul>
           </ul>
         </nav>
         <h3 class="text-muted">NYU Airlines</h3>
@@ -32,7 +39,7 @@
         <h2>Sign Up</h2>
         <br>
 
-        <form action="/signUpStaff" class="form-signin">
+        <form action="/signUpStaff" class="form-signin" method='POST'>
           <label for="inputAirlineName" class="">Airline Name</label>
           <input type="name" name="inputAirlineName" id="inputAirlineName" class="form-control" placeholder="Airline Name" required autofocus>
 

@@ -101,85 +101,44 @@
         </div>
         <form class="form" action="/search_flights" method="POST">
 
-          <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="departure">Airline Name</label>
-              <select class="form-control" id="departure" name="airline3">
-                {% for line in airlines %}
-
-                <option name="{{ line.airline_name }}">{{ line.airline_name }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
+          
 
           <div class="modal-body">
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Flight_no"> Flight number </label>
-              <select class="form-control" id="arrival" name="arrival3">
-                {% for flight in allflights %}
-
-                <option name="{{ airport.airport_name }}">{{  flight.flight_num }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
+            
             <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="Date_begin"> Date Departure </label>
-              <input class="form-control" id="Date_begin" type="datetime-local" name="date_dep3">
+              <input class="form-control" id="Date_begin" type="date" name="date_dep3">
             </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Date_end"> Date Arrival </label>
-              <input class="form-control" id="Date_end" type="datetime-local" name="date_arr3">
-            </div>
+            
             <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="departure">Departs From</label>
-              <select class="form-control" id="departure" name="departure3">
+              <input class='form-control' name='departure3'>
+              <!-- <select class="form-control" id="departure" name="departure3">
                 {% for airport in airports %}
 
                 <option name="{{ airport.airport_name }}">{{  airport.airport_name }}</option>
 
                 {% endfor %}
-              </select>
+              </select> -->
             </div>
 
 
             <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="arrival">Arrival</label>
-              <select class="form-control" id="arrival" name="arrival3">
+              <input class='form-control' name = 'arrival3'>
+              <!-- <select class="form-control" id="arrival" name="arrival3">
                 {% for airport in airports %}
 
                 <option name="{{ airport.airport_name }}">{{  airport.airport_name }}</option>
 
                 {% endfor %}
-              </select>
+              </select> -->
             </div>
             
             
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Price"> Price </label>
-              <input class="form-control" id="Price" type="text" name="price3">
-            </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="arrival">Status</label>
-              <select class="form-control" id="status" name="status3">
-                {% for stat in stats %}
+            
 
-                <option name="{{ stat.status }}">{{ stat.status }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="arrival">Plane ID</label>
-              <select class="form-control" id="arrival" name="planeid3">
-                {% for plane in planes %}
-
-                <option name="{{ plane.airplane_id }}">{{ plane.airplane_id }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
+            
             
           </div>
           <div class="modal-footer">
