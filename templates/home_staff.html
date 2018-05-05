@@ -25,7 +25,7 @@
       <div class="header navbar fixed-top">
                 <ul class="nav nav-pills">
                     <li class="nav-item ">
-                        <a class="nav-link" href="./index.html">
+                        <a class="nav-link" href="/">
                             <span class="fa fa-home fa-lg"></span> Home</a>
                     </li>
                     <li class="nav-item active">
@@ -41,10 +41,11 @@
            </div>
 
         <h3 class="text-muted">NYU Airlines</h3>
+        <h4>You are logged in as: {{username}} from {{curr_line}}</h4>
       </div>
  
       <div class="jumbotron">
-        <h4>You are logged in as: {{username}} from {{curr_line}}</h4>
+        
         <br>
 
 
@@ -87,8 +88,9 @@
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#add_new_flights">Add new flights</a>
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#change_status">Change status</a>
 
-                      <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#search_flights">Search for flights</a>
+                     
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#search_passengers">Search for passengers for a flight</a>
+                      <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#add_new_planes">Add new planes</a>
                       
                     </div>
 <!--               
@@ -102,34 +104,7 @@
     </div>
 
     
-        <div id="collapseTwo" class="container">
-            <div class="panel-body">
-
-              <table class='table'>
-              <th>Airline Name</th>
-              <th>Airplane ID</th>
-              <th>Total Seats</th>
-              
-
-            {% for line in allplanes %}
-              <tr>
-                <td>{{line.airline_name}}</td>
-                <td>{{line.airplane_id}}</td>
-                <td>{{line.seats}}</td>
-                
-              </tr>
-            {% endfor %}
-            </table>
-<!--                 add plane 
-
- -->            </div>
-            <div class="tab-content">
-                    <div class="tab-pane fade active in" id="Planes">
-                      <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#add_new_planes">Add new planes</a>
-                      
-                    </div>
-        </div>
-    </div>
+        
 
     
         <div id="collapseThree" class="container">
@@ -141,7 +116,7 @@
               <th>Airport City</th>
               
 
-            {% for line in all_airports %}
+            {% for line in airports %}
               <tr>
                 <td>{{line.airport_name}}</td>
                 <td>{{line.airport_city}}</td>
@@ -204,11 +179,11 @@
           </div>
 
 
-          <div class="panel-body">
-                            <h3>Top agents by comission in the past year</h3>
+                            
 
 
                 <div class="table-responsive">
+                  <h3>Top agents by comission in the past year</h3>
 
             <table class='table'>
               <th>Agent ID</th>
@@ -369,8 +344,10 @@
 
 
 
+<div class= 'container'>
+  <div class='row'>
 
-        <div class="piechartM">
+        <div class="col-sm-6 piechartM">
         <h3>Revenue Comparison for  a month</h3><!-- bar chart canvas element -->
                         <canvas id="chartM" width="300" height="200"></canvas>
             <script>
@@ -397,7 +374,7 @@
             </script>
           </div>
 
-          <div class="piechartY">
+          <div class="col-sm-6 piechartY">
         <h3>Revenue Comparison for  a year</h3><!-- bar chart canvas element -->
                         <canvas id="chartY" width="300" height="200"></canvas>
             <script>
@@ -430,6 +407,11 @@
 
 
 </div>
+</div>
+
+
+</div>
+
 
 
 
@@ -535,7 +517,27 @@
           <h2 class="modal-title">Add new flights</h2>
         </div>
         <form class="form" action="/add_plane" method="POST">
-          <div class='modal-inner'>
+          <div class='modal-body'>
+            <div class="">
+              <h2>Currently owned planes</h2>
+              <table class='table'>
+              <th>Airline Name</th>
+              <th>Airplane ID</th>
+              <th>Total Seats</th>
+              
+
+            {% for line in allplanes %}
+              <tr>
+                <td>{{line.airline_name}}</td>
+                <td>{{line.airplane_id}}</td>
+                <td>{{line.seats}}</td>
+                
+              </tr>
+            {% endfor %}
+            </table>
+<!--                 add plane 
+
+ -->            </div>
           <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="departure">Airline Name</label>
               <select class="form-control" id="departure" name="airline2">
@@ -651,97 +653,7 @@
     </div>
   </div>
 
-<div aria-hidden="true" class="modal fade" id="search_flights" role="dialog" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-heading">
-          <a class="modal-close" data-dismiss="modal">×</a>
-          <h2 class="modal-title">Search for a Flight</h2>
-        </div>
-        <form class="form" action="/search_flights" method="POST">
 
-          <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="departure">Airline Name</label>
-              <select class="form-control" id="departure" name="airline3">
-                {% for line in airlines %}
-
-                <option name="{{ line.airline_name }}">{{ line.airline_name }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-
-          <div class="modal-inner">
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Flight_no"> Flight number </label>
-              <input class="form-control" id="Flight_no" type="text" name="flight_id3">
-            </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Date_begin"> Date Departure </label>
-              <input class="form-control" id="Date_begin" type="datetime-local" name="date_dep3">
-            </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Date_end"> Date Arrival </label>
-              <input class="form-control" id="Date_end" type="datetime-local" name="date_arr3">
-            </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="departure">Departs From</label>
-              <select class="form-control" id="departure" name="departure3">
-                {% for airport in airports %}
-
-                <option name="{{ airport.airport_name }}">{{  airport.airport_name }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-
-
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="arrival">Arrival</label>
-              <select class="form-control" id="arrival" name="arrival3">
-                {% for airport in airports %}
-
-                <option name="{{ airport.airport_name }}">{{  airport.airport_name }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-            
-            
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="Price"> Price </label>
-              <input class="form-control" id="Price" type="text" name="price3">
-            </div>
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="arrival">Status</label>
-              <select class="form-control" id="status" name="status3">
-                {% for stat in stats %}
-
-                <option name="{{ stat.status }}">{{ stat.status }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="form-group form-group-label form-group-brand form-limit3">
-              <label class="floating-label" for="arrival">Plane ID</label>
-              <select class="form-control" id="arrival" name="planeid3">
-                {% for plane in planes %}
-
-                <option name="{{ plane.airplane_id }}">{{ plane.airplane_id }}</option>
-
-                {% endfor %}
-              </select>
-            </div>
-            
-          </div>
-          <div class="modal-footer">
-            <p class="text-right"><button class="btn btn-flat btn-brand waves-attach" data-dismiss="modal" type="button">Close</button><button class="btn btn-flat btn-brand waves-attach" type="submit">Add</button></p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 <!-- search passengers from a flight -->
   <div aria-hidden="true" class="modal fade" id="search_passengers" role="dialog" tabindex="-1">
     <div class="modal-dialog">
