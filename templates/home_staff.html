@@ -211,7 +211,7 @@
             <div class="panel-body">
                 
                 <div class="table-responsive">
-
+<h3>Top customers of our airline</h3>
             <table class='table'>
               <th>Email</th>
               <th>Name</th>
@@ -426,7 +426,20 @@
         </div>
         <form class="form" action="/add_flights" method="POST">
 
-          <div class="form-group form-group-label form-group-brand form-limit3">
+          
+
+          <div class="modal-body">
+            <div class="form-group form-group-label form-group-brand form-limit3">
+              <label class="floating-label" for="departure">Airline Name</label>
+              <select class="form-control" id="departure" name="airline1">
+                {% for line in airlines %}
+
+                <option name="{{ line.airline_name }}">{{ line.airline_name }}</option>
+
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="departure">Airline Name</label>
               <select class="form-control" id="departure" name="airline1">
                 {% for line in airlines %}
@@ -437,7 +450,6 @@
               </select>
             </div>
 
-          <div class="modal-inner">
             <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="Flight_no"> Flight number </label>
               <input class="form-control" id="Flight_no" type="text" name="flight_id">
@@ -514,7 +526,7 @@
       <div class="modal-content">
         <div class="modal-heading">
           <a class="modal-close" data-dismiss="modal">×</a>
-          <h2 class="modal-title">Add new flights</h2>
+          <h2 class="modal-title">Add new planes</h2>
         </div>
         <form class="form" action="/add_plane" method="POST">
           <div class='modal-body'>
@@ -578,7 +590,7 @@
           <h2 class="modal-title">Add new airports</h2>
         </div>
         <form class="form" action="/add_airport" method="POST">
-          <div class='modal-inner'>
+          <div class='modal-body'>
           <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="port">Airport Name</label>
               <input class="form-control" id="port" type="text" name="airportA">
@@ -610,7 +622,7 @@
           <h2 class="modal-title">Change Flight Status</h2>
         </div>
         <form class="form" action="/change_status" method="POST">
-          <div class='modal-inner'>
+          <div class='modal-body'>
               <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="departure">Airline Name</label>
               <select class="form-control" id="departure" name="airline3">
@@ -663,7 +675,7 @@
           <h2 class="modal-title">Search for passengers from a flight</h2>
         </div>
         <form class="form" action="/search_passengers" method="POST">
-
+          <div class="modal-body">
           <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="departure">Airline Name</label>
               <select class="form-control" id="departure" name="airline3">
@@ -691,6 +703,7 @@
           <div class="modal-footer">
             <p class="text-right"><button class="btn btn-flat btn-brand waves-attach" data-dismiss="modal" type="button">Close</button><button class="btn btn-flat btn-brand waves-attach" type="submit">Add</button></p>
           </div>
+        </div>
         </form>
       </div>
     </div>
@@ -698,13 +711,14 @@
 <!-- search flights for passnger -->
 <div aria-hidden="true" class="modal fade" id="customers_flights" role="dialog" tabindex="-1">
     <div class="modal-dialog">
+      <div class = 'modal-body'>
       <div class="modal-content">
         <div class="modal-heading">
           <a class="modal-close" data-dismiss="modal">×</a>
           <h2 class="modal-title">Search for passengers from a flight</h2>
         </div>
         <form class="form" action="/customers_flights" method="POST">
-
+          <div class= "modal-body">
           <div class="form-group form-group-label form-group-brand form-limit3">
               <label class="floating-label" for="Flight_no"> Customer's Email </label>
               <input class="form-control" id="Flight_no" type="text" name="email4">
@@ -715,7 +729,9 @@
           <div class="modal-footer">
             <p class="text-right"><button class="btn btn-flat btn-brand waves-attach" data-dismiss="modal" type="button">Close</button><button class="btn btn-flat btn-brand waves-attach" type="submit">Add</button></p>
           </div>
+          </div>
         </form>
+        </div>
       </div>
     </div>
   </div>

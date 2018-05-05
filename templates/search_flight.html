@@ -21,8 +21,8 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <li role="presentation" ><a href="/">Home</a></li> &ensp;
-            <li role="presentation" class="active"><a href="/profileStaff">Profile</a></li> &ensp;
-            <li role="presentation"><a href="/logout">Logout</a></li> &ensp;
+            
+            
           </ul>
         </nav>
         <h3 class="text-muted">NYU Airlines</h3>
@@ -43,7 +43,7 @@
       <th>Arrival Time</th>
       <th>Flight Status</th>
 
-    {% for line in results %}
+    {% for line in flights %}
       <tr>
         <td>{{line.airline_name}}</td>
         <td>{{line.flight_num}}</td>

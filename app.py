@@ -352,66 +352,22 @@ def TEST():
 
 @app.route('/search_flights', methods=['GET', 'POST'])
 def search_flights():
-	flight_id = request.form['flight_id3']
-	airline = request.form['airline3']
+	
 	date_depart = request.form['date_dep3']
-	date_arr = request.form['date_arr3']
 	departure = request.form['departure3']
 	arrival = request.form['arrival3']
-	price = request.form['price3']
-	status = request.form['status3']	
-	plane_id = request.form['planeid3']
+	cursor = conn.cursor()
 
-	inputs = [flight_id, airline, date_depart, date_arr, departure, arrival, price,status,plane_id]
-	send_inputs = ()
-	for i in inputs:
-		if i != '':
-			send_inputs.append(i)
-		else:
-			send_inputs.append(0)
+	
 
-	query = 'select * from flights where '
-	for i in range(send_inputs):
-		if i == 1:
-			if send_inputs[i] != 0:
-				query+=' flight_num = %s '
-				send_inputs = send_inputs+flight_id
-		elif i == 0:
-			if send_inputs[i] != 0:
-				query+=' airline_name = %s '
-				send_inputs = send_inputs+airline
-		elif i == 2:
-			if send_inputs[i] != 0:
-				query+=' departure_airport = %s '
-				send_inputs = send_inputs+departure
-		elif i == 3:
-			if send_inputs[i] != 0:
-				query+=' departure_time = %s '
-				send_inputs = send_inputs+date_depart
-		elif i == 4:
-			if send_inputs[i] != 0:
-				query+=' arrival_airport = %s '
-				send_inputs = send_inputs+arrival
-		elif i == 5:
-			if send_inputs[i] != 0:
-				query+=' arrival_time = %s '
-				send_inputs = send_inputs+date_arr
-		elif i == 6:
-			if send_inputs[i] != 0:
-				query+=' price = %s '
-				send_inputs = send_inputs+price
-		elif i == 7:
-			if send_inputs[i] != 0:
-				query+=' status = %s '
-				send_inputs = send_inputs+plane_id
-		elif i == 8:
-			if send_inputs[i] != 0:
-				query+=' airplane_id = %s '
-				send_inputs = send_inputs+airline
+	query = 'select * from flight where DATE(departure_time)=%s and departure_airport = %s and arrival_airport=%s'
 
-	cursor.execute(query, (send_inputs))
+	
+
+	cursor.execute(query, (date_depart, departure, arrival))
 	results = cursor.fetchall()
-	return render_template('search_flights.html', flights = results		)
+	# return(str([date_depart, departure, arrival]))
+	return render_template('search_flight.html', flights = results		)
 
 @app.route('/search_passengers', methods=['GET', 'POST'])
 def search_passengers():
@@ -525,32 +481,15 @@ def profileStaff():
 		
 
 		colors = ["#F7464A", "#46BFBD"]
+		pie_labelsM = []
+		pie_valuesM = []
+		pie_labelsY = []
+		pie_valuesY = []
+
+
 		pie_labelsM = ['Direct', 'Agent']
-		pie_valuesM = [1568, 7896]
 		pie_labelsY = ['Direct', 'Agent']
-		pie_valuesY = [123456, 2222]
-		return render_template('home_staff.html', username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors),
-			for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000)
-		# labels = [
-		# 'JAN', 'FEB', 'MAR', 'APR',
-		# 'MAY', 'JUN', 'JUL', 'AUG',
-		# 'SEP', 'OCT', 'NOV', 'DEC'
-		# ]
-
-		# values = [
-		# 967.67, 1190.89, 1079.75, 1349.19,
-		# 2328.91, 2504.28, 2873.83, 4764.87,
-		# 4349.29, 6458.30, 9907, 16297
-		# ]
-
-		# colors = [
-		# "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-		# "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-		# "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
-
-		# pie_labels = labels
-		# pie_values = values
-		# return render_template('chart.html', title='Bitcoin Monthly Price in USD', max=17000, set=zip(values, labels, colors))
+		
 
 		
 
@@ -561,7 +500,7 @@ def profileStaff():
 
 		for row in revMdirect:
 			for col in row:
-				pie_valuesM.append(row[col])
+				pie_valuesM.append(int(row[col]))
 
 
 		queryRevMagent = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is not Null and departure_time > date(now() - interval 1 month) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
@@ -570,7 +509,7 @@ def profileStaff():
 
 		for row in revMagent:
 			for col in row:
-				pie_valuesM.append(row[col])
+				pie_valuesM.append(int(row[col]))
 
 		queryRevYdirect = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is Null and departure_time > date(now() - interval 1 year ) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
 
@@ -583,21 +522,15 @@ def profileStaff():
 
 		for row in revYdirect:
 			for col in row:
-				pie_valuesY.append(row[col])
+				pie_valuesY.append(int(row[col]))
 
 		for row in revYagent:
 			for col in row:
-				pie_valuesY.append(row[col])
+				pie_valuesY.append(int(row[col]))
 
 
-		# labels = ["January","February","March","April","May","June","July","August"]
-		# values = [10,9,8,7,6,4,7,8]
-		# colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"  ]
-		# return render_template('chart.html', set=zip(values, labels, colors))
-
-
-		return render_template('home_staff.html', set=zip(values, labels, colors), username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors),
-			for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000, labelsBar = labelsBar, valuesBar = valuesBar, stepsBar = stepsBar ,maxspendingBar = maxbuyBar)
+		return render_template('home_staff.html', username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3M = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors), for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000)
+		# return render_template('home_staff.html', set=zip(values, labels, colors), username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3m = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors), for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000, labelsBar = labelsBar, valuesBar = valuesBar, stepsBar = stepsBar ,maxspendingBar = maxbuyBar)
 	else:
 		error = 'you are not logged in as staff'
 		return redirec(url_for('/'))
