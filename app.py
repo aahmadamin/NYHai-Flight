@@ -995,7 +995,6 @@ def buyFlight():
 	qticketID = 'SELECT max(ticket_id) as m from ticket'
 	cursor.execute(qticketID)
 	ID = cursor.fetchone()['m'] +1
-	
 	qF = "SELECT * from flight where airline_name =%s and flight_num =%s"
 	cursor.execute(qF, (buyAirlineName, buyFlightNumber))
 	fdata = cursor.fetchone()
@@ -1016,6 +1015,8 @@ def buyFlight():
 
 				session['email'] = buyEmail
 				session['logged_in'] = True
+				conn.commit()
+				cursor.close()
 				return (redirect(url_for('profileAgent')))
 
 
@@ -1033,6 +1034,9 @@ def buyFlight():
 				cursor.execute(qpurchC, (ID, buyEmail))
 				session['email'] = buyEmail
 				session['logged_in'] = True
+
+				conn.commit()
+				cursor.close()
 				return (redirect(url_for('profileCustomer')))
 		conn.commit()
 		cursor.close()
