@@ -662,9 +662,10 @@ def profileStaffDates():
 def profileCustomer():
 	email = session['email']
 	cursor = conn.cursor()
+	now = datetime.datetime.now()
 	if session['logged_in'] == True:
-		query = 'SELECT flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases WHERE customer_email = %s'
-		cursor.execute (query, (email))
+		query = 'SELECT flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases WHERE customer_email = %s and DATE(flight.departure_time) >= %s'
+		cursor.execute (query, (email, str(now.year) + '-' + str(now.month) + '-' + str(now.day)))
 		data=cursor.fetchall()
 		
 		# months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'Novermber', 'December']
@@ -691,7 +692,6 @@ def profileCustomer():
 				elif e == 'monthly_spending':
 					spending.append(int(entry[e]))
 		
-		now = datetime.datetime.now()
 		# print(now)
 		# print (now.year, now.month, now.day, now.hour, now.minute, now.second)
 
@@ -814,8 +814,8 @@ def profileAgent():
 		# print(to)
 		# print(type(to))
 		cursor = conn.cursor()
-		query = 'SELECT customer.email, customer.name, customer.password, flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases, customer, booking_agent WHERE customer.email = purchases.customer_email AND purchases.booking_agent_id = booking_agent.booking_agent_id AND booking_agent.email = %s'
-		cursor.execute (query, (email))
+		query = 'SELECT customer.email, customer.name, customer.password, flight.airline_name, flight.flight_num, flight.departure_airport, flight.departure_time, flight.arrival_airport, flight.arrival_time, flight.status FROM flight NATURAL JOIN ticket NATURAL JOIN purchases, customer, booking_agent WHERE customer.email = purchases.customer_email AND purchases.booking_agent_id = booking_agent.booking_agent_id AND booking_agent.email = %s and DATE(flight.departure_time) >= %s'
+		cursor.execute (query, (email, str(now.year) + '-' + str(now.month) + '-' + str(now.day)))
 		data=cursor.fetchall()
 
 		query2 = 'SELECT tickets_sold, total_commission, total_commission/tickets_sold AS average_commission FROM (SELECT COUNT(ticket_id) AS tickets_sold, SUM(price)/10 AS total_commission FROM flight NATURAL JOIN ticket NATURAL JOIN purchases NATURAL JOIN booking_agent WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s) AS t1'
@@ -937,7 +937,7 @@ def profileAgent2():
 	# print(fromTwelveYear)
 	fromTwelve = fromTwelveYear + '-' + nowMonth + '-' + nowDay
 	cursor = conn.cursor()
-	query4 = 'SELECT * FROM (SELECT customer_email, SUM(price/10) as commission FROM purchases NATURAL JOIN booking_agent NATURAL JOIN ticket NATURAL JOIN flight WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s GROUP BY customer_email ORDER BY commission DESC) as t1 LIMIT 5'
+	query4 = 'SELECT * FROM (SELECT customer_email, SUM(price/10) AS commission FROM purchases NATURAL JOIN booking_agent NATURAL JOIN ticket NATURAL JOIN flight WHERE booking_agent.email = %s AND purchase_date BETWEEN %s AND %s GROUP BY customer_email ORDER BY commission DESC) as t1 LIMIT 5'
 	cursor.execute (query4, (email, fromTwelve, to))
 	data4=cursor.fetchall()
 	labels = []
