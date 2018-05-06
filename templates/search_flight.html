@@ -5,13 +5,17 @@
   <head>
     <title>Python Flask Bucket List App</title>
     
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/signup.css" rel="stylesheet">
     <script /static/js/jquery.js"> </script>
     <script /static/js/signUp.js"></script>
-    <script src='static/js/Chart.min.js'></script>
+ <script src='static/Chart.min.js'></script> 
     
   </head>
  
@@ -56,6 +60,42 @@
     {% endfor %}
     </table>
   </div>
+
+  <form action="/buyFlight" method="POST" class="form-signin">
+
+
+                <h2>Enter the details of the flight you want to purchase</h2>
+                <label for="buyAirlineName" class="">Airline Name</label>
+                <input type="text" name="buyAirlineName" id="buyAirlineName" class="form-control" placeholder="Airline Name" <!--  --> autofocus>
+
+                <label for="buyFlightNumber" class="">Flight Number</label>
+                <input type="number" name="buyFlightNumber" id="buyFlightNumber" class="form-control" placeholder="Flight Number"  autofocus>
+  
+                
+                
+                
+                {% if error %}
+                    <p class="error"><strong>Error:</strong> {{error}}</p>
+                {% endif %}
+                <br>
+              <label class="floatisng-label" for="buyEmail">Email (if you are not a booking agent)</label>
+              <input class="form-control" id="buyEmail" type="text" name="buyEmail">
+
+
+
+
+              <label class="floating-label" for="buyPass">Password</label>
+              <input class="form-control" id="buyPass" type="text" name="buyPass">
+
+              <label class="floating-label" for="buyAgent"> Booking Agent ID (if applicable) </label>
+              <input class="form-control" id="buyAgent" type="text" name="buyAgent">
+              <label class="floating-label" for="buyAgent"> Your customer's email (if you are an agent) </label>
+              <input class="form-control" id="buyCust" type="text" name="buyCust">
+            
+              <input class="btn btn-md btn-primary btn-block" type="submit" value="Confirm">
+
+
+            </form>
 
     
 

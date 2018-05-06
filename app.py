@@ -373,7 +373,7 @@ def search_flights():
 	cursor.execute(query, (date_depart, departure, arrival))
 	results = cursor.fetchall()
 	# return(str([date_depart, departure, arrival]))
-	return render_template('search_flight.html', flights = results		)
+	return render_template('search_flight.html', flights = results	)
 
 @app.route('/search_passengers', methods=['GET', 'POST'])
 def search_passengers():
@@ -973,6 +973,74 @@ def flightStatus():
 	else:
 		error = 'Invalid flight details'
 		return render_template('index.html', error=error)
+
+#author: Atem
+@app.route('/buyFlight', methods=['GET','POST'])
+def buyFlight():
+	buyAirlineName = request.form['buyAirlineName']
+
+	
+
+
+	buyFlightNumber = request.form['buyFlightNumber']
+
+	buyEmail = request.form['buyEmail']
+
+	buyPass = request.form['buyPass']
+
+	buyAgent = request.form['buyAgent']
+
+	buyCust = request.form['buyCust']
+	cursor = conn.cursor()
+	qticketID = 'SELECT max(ticket_id) as m from ticket'
+	cursor.execute(qticketID)
+	ID = cursor.fetchone()['m'] +1
+	
+	qF = "SELECT * from flight where airline_name =%s and flight_num =%s"
+	cursor.execute(qF, (buyAirlineName, buyFlightNumber))
+	fdata = cursor.fetchone()
+
+	if (fdata):
+		if buyAgent != '':
+			q = 'SELECT * from booking_agent where email =%s and password=%s and booking_agent_id=%s'
+			cursor.execute(q,(buyEmail, buyPass, buyAgent))
+			data = cursor.fetchone()
+			#check if agent exists -> check if flight exists
+			if (data):
+				
+				qtickA = 'INSERT INTO `ticket`(`ticket_id`, `airline_name`, `flight_num`) VALUES (%s, %s, %s)'
+				cursor.execute(qtickA, (ID, buyAirlineName, buyFlightNumber))
+
+				qpurchA = 'INSERT INTO `purchases`(`ticket_id`, `customer_email`, `booking_agent_id`, `purchase_date`) VALUES (%s, %s, %s, date(now()))'
+				cursor.execute(qpurchA, (ID, buyCust, buyAgent))
+
+				session['email'] = buyEmail
+				session['logged_in'] = True
+				return (redirect(url_for('profileAgent')))
+
+
+		else:
+			q = 'SELECT * from customer where email =%s and password=%s '
+			cursor.execute(q,(buyEmail, buyPass))
+			data = cursor.fetchone()
+			#check if customer exists -> check if flight exists
+			if (data):
+				
+				qtickC = 'INSERT INTO `ticket`(`ticket_id`, `airline_name`, `flight_num`) VALUES (%s, %s, %s)'
+				cursor.execute(qtickC, (ID, buyAirlineName, buyFlightNumber))
+
+				qpurchC = 'INSERT INTO `purchases`(`ticket_id`, `customer_email`, `booking_agent_id`, `purchase_date`) VALUES (%s, %s, NULL, date(now()))'
+				cursor.execute(qpurchC, (ID, buyCust, buyAgent))
+				session['email'] = buyEmail
+				session['logged_in'] = True
+				return (redirect(url_for('profileCustomer')))
+		conn.commit()
+		cursor.close()
+
+
+			# qbuy = 
+
+	return (redirect(url_for('show_index')))
 
 #author: Amin
 @app.route('/logout')
