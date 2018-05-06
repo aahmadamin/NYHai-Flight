@@ -66,10 +66,10 @@
 
                 <h2>Enter the details of the flight you want to purchase</h2>
                 <label for="buyAirlineName" class="">Airline Name</label>
-                <input type="text" name="buyAirlineName" id="buyAirlineName" class="form-control" placeholder="Airline Name" <!--  --> autofocus>
+                <input type="text" name="buyAirlineName" id="buyAirlineName" class="form-control" placeholder="Airline Name" required autofocus>
 
                 <label for="buyFlightNumber" class="">Flight Number</label>
-                <input type="number" name="buyFlightNumber" id="buyFlightNumber" class="form-control" placeholder="Flight Number"  autofocus>
+                <input type="number" name="buyFlightNumber" id="buyFlightNumber" class="form-control" placeholder="Flight Number" required autofocus>
   
                 
                 
@@ -78,15 +78,15 @@
                     <p class="error"><strong>Error:</strong> {{error}}</p>
                 {% endif %}
                 <br>
-              <label class="floatisng-label" for="buyEmail">Email (if you are not a booking agent)</label>
+              <label class="floatisng-label" for="buyEmail">Email you use to log in</label>
               <input class="form-control" id="buyEmail" type="text" name="buyEmail">
 
 
 
 
-              <label class="floating-label" for="buyPass">Password</label>
+              <label class="floating-label" for="buyPass">Your Password</label>
               <input class="form-control" id="buyPass" type="text" name="buyPass">
-
+              <h3>Only fill the following if you are a booking agent</h3>
               <label class="floating-label" for="buyAgent"> Booking Agent ID (if applicable) </label>
               <input class="form-control" id="buyAgent" type="text" name="buyAgent">
               <label class="floating-label" for="buyAgent"> Your customer's email (if you are an agent) </label>

@@ -10,7 +10,7 @@ conn = pymysql.connect(host='localhost',
 @app.route('/', methods=['GET', "POST"])
 def main():
 	return render_template('index.html')
-@app.route('/main', methods=['GET', "POST"])
+@app.route('/show_index', methods=['GET', "POST"])
 def show_index():
 	return render_template('index.html')
 @app.route('/showUsertype')
@@ -134,12 +134,12 @@ def signUpAgent():
 #author: Artem
 @app.route('/signUpStaff', methods=['GET', 'POST'])
 def signUpStaff():
-	username = request.form['username']
-	password = request.form['password']
-	first_name = request.form['first_name']
-	last_name = request.form['last_name']
-	dob = request.form['dob']
-	airline = request.form['airline']
+	username = request.form['inputEmail']
+	password = request.form['inputPassword']
+	first_name = request.form['inputFirstName']
+	last_name = request.form['inputLastName']
+	dob = request.form['inputDOBd']
+	airline = request.form['inputAirlineName']
 	cursor = conn.cursor()
 	query = 'SELECT * FROM airline_staff WHERE username = %s'
 	cursor.execute (query, (username))
@@ -148,15 +148,15 @@ def signUpStaff():
 	if(data):
 		error = "This user already exists"
 		#debug
-		return render_template('signup_staff.html')
+		return render_template('signup_airlinestaff.html')
 	else:
-		ins = 'INSERT INTO airline_staff(username, password, first_name, last_name, dob, airline_staff) VALUES(%s, %s, %s, %s, %s, %s)'
+		ins = 'INSERT INTO airline_staff(username, password, first_name, last_name, date_of_birth, airline_name) VALUES(%s, %s, %s, %s, %s, %s)'
 		
 
-		cursor.execute(ins, (username, password, first_name, last_name, dob, airline_staff))
+		cursor.execute(ins, (username, password, first_name, last_name, dob, airline))
 		conn.commit()
 		cursor.close()
-		return render_template('signin.html')
+		return render_template('login.html')
 #author: Artem
 @app.route('/signUpCustomer', methods=['GET','POST'])
 def signUpCustomer():
@@ -995,7 +995,6 @@ def buyFlight():
 	qticketID = 'SELECT max(ticket_id) as m from ticket'
 	cursor.execute(qticketID)
 	ID = cursor.fetchone()['m'] +1
-	
 	qF = "SELECT * from flight where airline_name =%s and flight_num =%s"
 	cursor.execute(qF, (buyAirlineName, buyFlightNumber))
 	fdata = cursor.fetchone()
@@ -1016,6 +1015,8 @@ def buyFlight():
 
 				session['email'] = buyEmail
 				session['logged_in'] = True
+				conn.commit()
+				cursor.close()
 				return (redirect(url_for('profileAgent')))
 
 
@@ -1030,9 +1031,12 @@ def buyFlight():
 				cursor.execute(qtickC, (ID, buyAirlineName, buyFlightNumber))
 
 				qpurchC = 'INSERT INTO `purchases`(`ticket_id`, `customer_email`, `booking_agent_id`, `purchase_date`) VALUES (%s, %s, NULL, date(now()))'
-				cursor.execute(qpurchC, (ID, buyCust, buyAgent))
+				cursor.execute(qpurchC, (ID, buyEmail))
 				session['email'] = buyEmail
 				session['logged_in'] = True
+
+				conn.commit()
+				cursor.close()
 				return (redirect(url_for('profileCustomer')))
 		conn.commit()
 		cursor.close()
