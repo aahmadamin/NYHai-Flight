@@ -1030,7 +1030,7 @@ def buyFlight():
 				cursor.execute(qtickC, (ID, buyAirlineName, buyFlightNumber))
 
 				qpurchC = 'INSERT INTO `purchases`(`ticket_id`, `customer_email`, `booking_agent_id`, `purchase_date`) VALUES (%s, %s, NULL, date(now()))'
-				cursor.execute(qpurchC, (ID, buyCust, buyAgent))
+				cursor.execute(qpurchC, (ID, buyEmail))
 				session['email'] = buyEmail
 				session['logged_in'] = True
 				return (redirect(url_for('profileCustomer')))
