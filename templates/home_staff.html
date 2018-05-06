@@ -87,6 +87,7 @@
                     <div class="tab-pane fade active in" id="Flights">
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#add_new_flights">Add new flights</a>
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#change_status">Change status</a>
+                      <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#search_flights">Search for flights</a>
 
                      
                       <a class="btn btn-brand waves-attach waves-light" data-toggle="modal" href="#search_passengers">Search for passengers for a flight</a>
@@ -671,6 +672,38 @@
     </div>
   </div>
 
+<div aria-hidden="true" class="modal fade" id="search_flights" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-heading">
+          <a class="modal-close" data-dismiss="modal">×</a>
+          <h2 class="modal-title">Change Flight Status</h2>
+        </div>
+        <form class="form" action="/search_flights_staff" method="POST">
+          <div class='modal-body'>
+              <div class="form-group form-group-label form-group-brand form-limit3">
+              <label class="floating-label" for="departure">Date of departure</label>
+              <input class="form-control" id="Flight_no" type="date" name="date_dep">
+            </div>
+
+            <div class="form-group form-group-label form-group-brand form-limit3">
+              <label class="floating-label" for="departure">Departure Airport</label>
+              <input class="form-control" id="Flight_no" type="text" name="departure">
+            </div>
+
+            <div class="form-group form-group-label form-group-brand form-limit3">
+              <label class="floating-label" for="arrival">Arrival Airport</label>
+              <input class="form-control" id="Flight_no" type="text" name="arrival">
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <p class="text-right"><button class="btn btn-flat btn-brand waves-attach" data-dismiss="modal" type="button">Close</button><button class="btn btn-flat btn-brand waves-attach" type="submit">Add</button></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 <!-- search passengers from a flight -->
   <div aria-hidden="true" class="modal fade" id="search_passengers" role="dialog" tabindex="-1">
