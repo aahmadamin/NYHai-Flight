@@ -528,10 +528,12 @@ def profileStaff():
 
 		cursor.execute(queryRevMdirect, (email))
 		revMdirect = cursor.fetchall()
-
 		for row in revMdirect:
 			for col in row:
-				pie_valuesM.append(int(row[col]))
+				if row[col] is None:
+					pie_valuesM.append(0)
+				else:
+					pie_valuesM.append(int(row[col]))
 
 
 		queryRevMagent = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is not Null and departure_time > date(now() - interval 1 month) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
@@ -540,7 +542,10 @@ def profileStaff():
 
 		for row in revMagent:
 			for col in row:
-				pie_valuesM.append(int(row[col]))
+				if row[col] is None:
+					pie_valuesM.append(0)
+				else:
+					pie_valuesM.append(int(row[col]))
 
 		queryRevYdirect = 'select sum(price) from flight natural join ticket natural join purchases where booking_agent_id is Null and departure_time > date(now() - interval 1 year ) and flight.airline_name = (select airline_name from airline_staff where username = %s)'
 
@@ -553,11 +558,17 @@ def profileStaff():
 
 		for row in revYdirect:
 			for col in row:
-				pie_valuesY.append(int(row[col]))
+				if row[col] is None:
+					pie_valuesY.append(0)
+				else:
+					pie_valuesY.append(int(row[col]))
 
 		for row in revYagent:
 			for col in row:
-				pie_valuesY.append(int(row[col]))
+				if row[col] is None:
+					pie_valuesY.append(0)
+				else:
+					pie_valuesY.append(int(row[col]))
 
 
 		return render_template('home_staff.html', username = email, curr_line  =curr_line, allFlights = allFlights, airlines = airlines, airports = all_airports, allplanes =allplanes, stats = statuses, planes = planes, flights = flights, agents_month = agents_purchase_month, agents_year = agents_purchase_year, comission = agents_comission, customers = customers, dest3M = dest3M, dest1Y = dest1Y, for_month = zip(pie_valuesM, pie_labelsM, colors), for_year = zip(pie_valuesY, pie_labelsY, colors), max = 10000)
