@@ -134,12 +134,12 @@ def signUpAgent():
 #author: Artem
 @app.route('/signUpStaff', methods=['GET', 'POST'])
 def signUpStaff():
-	username = request.form['username']
-	password = request.form['password']
-	first_name = request.form['first_name']
-	last_name = request.form['last_name']
-	dob = request.form['dob']
-	airline = request.form['airline']
+	username = request.form['inputEmail']
+	password = request.form['inputPassword']
+	first_name = request.form['inputFirstName']
+	last_name = request.form['inputLastName']
+	dob = request.form['inputDOBd']
+	airline = request.form['inputAirlineName']
 	cursor = conn.cursor()
 	query = 'SELECT * FROM airline_staff WHERE username = %s'
 	cursor.execute (query, (username))
@@ -148,15 +148,15 @@ def signUpStaff():
 	if(data):
 		error = "This user already exists"
 		#debug
-		return render_template('signup_staff.html')
+		return render_template('signup_airlinestaff.html')
 	else:
-		ins = 'INSERT INTO airline_staff(username, password, first_name, last_name, dob, airline_staff) VALUES(%s, %s, %s, %s, %s, %s)'
+		ins = 'INSERT INTO airline_staff(username, password, first_name, last_name, date_of_birth, airline_name) VALUES(%s, %s, %s, %s, %s, %s)'
 		
 
-		cursor.execute(ins, (username, password, first_name, last_name, dob, airline_staff))
+		cursor.execute(ins, (username, password, first_name, last_name, dob, airline))
 		conn.commit()
 		cursor.close()
-		return render_template('signin.html')
+		return render_template('login.html')
 #author: Artem
 @app.route('/signUpCustomer', methods=['GET','POST'])
 def signUpCustomer():
