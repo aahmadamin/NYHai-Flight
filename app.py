@@ -448,10 +448,10 @@ def profileStaff():
 		cursor.execute(queryFreqCust, (email))
 		customers = cursor.fetchall()
 
-		queryDest3m = 'SELECT * from airport inner join (select arrival_airport from flight natural join ticket where flight.departure_time> date(now() - interval 3 month) and flight.airline_name = (select airline_name from airline_staff where username = %s)) as arr'
+		queryDest3m = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 3 month) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc'
 		cursor.execute(queryDest3m, (email))
 		dest3M = cursor.fetchall()
-		queryDestY = 'SELECT * from airport inner join (select arrival_airport from flight natural join ticket where flight.departure_time> date(now() - interval 1 year) and flight.airline_name = (select airline_name from airline_staff where username = %s) order by count(flight.flight_num) desc) as arr'
+		queryDestY = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 1 year) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc'
 		cursor.execute(queryDestY, (email))
 		dest1Y = cursor.fetchall()
 

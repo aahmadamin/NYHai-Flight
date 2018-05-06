@@ -265,14 +265,17 @@
                 <div class="table-responsive">
 
             <table class='table'>
-              <th>Airport Name</th>
-              <th>Airport City</th>
-              
+              <th>Agent ID</th>
+              <th>Agent Email</th>
+              <th>No of customers</th>
+
 
             {% for line in dest3M %}
               <tr>
                 <td>{{line.airport_name}}</td>
                 <td>{{line.airport_city}}</td>
+                <td>{{line.cust}}</td>
+
                 
               </tr>
             {% endfor %}
@@ -285,12 +288,15 @@
             <table class='table'>
               <th>Agent ID</th>
               <th>Agent Email</th>
-              
+              <th>No of customers</th>
+
 
             {% for line in dest1Y %}
               <tr>
                 <td>{{line.airport_name}}</td>
                 <td>{{line.airport_city}}</td>
+                <td>{{line.cust}}</td>
+
                 
               </tr>
             {% endfor %}
