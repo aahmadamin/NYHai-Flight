@@ -375,6 +375,28 @@ def search_flights():
 	# return(str([date_depart, departure, arrival]))
 	return render_template('search_flight.html', flights = results	)
 
+@app.route('/search_flights_staff', methods=['GET', 'POST'])
+def search_flights_staff():
+	email = session['email']
+	date_depart = request.form['date_dep']
+	departure = request.form['departure']
+	arrival = request.form['arrival']
+	cursor = conn.cursor()
+
+	
+
+	query = 'select * from flight where DATE(departure_time)=%s and departure_airport = %s and arrival_airport=%s and flight.airline_name = (select airline_name from airline_staff where username = %s)'
+
+	
+	if date_depart == '' or arrival =='' or departure=='':
+
+		cursor.execute(query, (date_depart, departure, arrival))
+		results = cursor.fetchall()
+		# return(str([date_depart, departure, arrival]))
+		return render_template('search_flight_staff.html', flights = results	)
+	else:
+		return render_template('search_flight_staff.html')
+
 @app.route('/search_passengers', methods=['GET', 'POST'])
 def search_passengers():
 	flight_id = request.form['flight_id3']
@@ -448,10 +470,10 @@ def profileStaff():
 		cursor.execute(queryFreqCust, (email))
 		customers = cursor.fetchall()
 
-		queryDest3m = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 3 month) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc'
+		queryDest3m = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 3 month) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc limit 3'
 		cursor.execute(queryDest3m, (email))
 		dest3M = cursor.fetchall()
-		queryDestY = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 1 year) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc'
+		queryDestY = 'select * from airport inner join (select arrival_airport, count(ticket_id) as cust from ticket natural join flight where flight.departure_time> date(now() - interval 1 year) and flight.airline_name = (select airline_name from airline_staff where username = %s) group by arrival_airport) as our_top on airport.airport_name=our_top.arrival_airport order by cust desc limit 3'
 		cursor.execute(queryDestY, (email))
 		dest1Y = cursor.fetchall()
 

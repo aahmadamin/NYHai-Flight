@@ -1,0 +1,80 @@
+<!--  Author: artem  -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Python Flask Bucket List App</title>
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/bootstrap-social.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/signup.css" rel="stylesheet">
+    <script /static/js/jquery.js"> </script>
+    <script /static/js/signUp.js"></script>
+ <script src='static/Chart.min.js'></script> 
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/">
+                            <span class="fa fa-home fa-lg"></span> Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./profileStaff">
+                            <span class="fa fa-info fa-lg"></span> Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="./logout"> 
+                            <span class="fa fa-list fa-lg"></span> Log Out</a>
+                    </li>
+                </ul>    
+        </nav>
+        <h3 class="text-muted">NYU Airlines</h3>
+      </div>
+ 
+      <div class="jumbotron">
+
+        <h2>Your search results</h2>
+
+    <div class="table-responsive">
+
+    <table class='table'>
+      <th>Airline Name</th>
+      <th>Flight Number</th>
+      <th>Departure Airport</th>
+      <th>Departure Time</th>
+      <th>Arrival Airport</th>
+      <th>Arrival Time</th>
+      <th>Flight Status</th>
+
+    {% for line in flights %}
+      <tr>
+        <td>{{line.airline_name}}</td>
+        <td>{{line.flight_num}}</td>
+        <td>{{line.departure_airport}}</td>
+        <td>{{line.departure_time}}</td>
+        <td>{{line.arrival_airport}}</td>
+        <td>{{line.arrival_time}}</td>
+        <td>{{line.status}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+
+  
+
+    
+
+  </div>
+  </body>
+</html>
