@@ -265,14 +265,17 @@
                 <div class="table-responsive">
 
             <table class='table'>
-              <th>Airport Name</th>
-              <th>Airport City</th>
-              
+              <th>Agent ID</th>
+              <th>Agent Email</th>
+              <th>No of customers</th>
+
 
             {% for line in dest3M %}
               <tr>
                 <td>{{line.airport_name}}</td>
                 <td>{{line.airport_city}}</td>
+                <td>{{line.cust}}</td>
+
                 
               </tr>
             {% endfor %}
@@ -285,12 +288,15 @@
             <table class='table'>
               <th>Agent ID</th>
               <th>Agent Email</th>
-              
+              <th>No of customers</th>
+
 
             {% for line in dest1Y %}
               <tr>
                 <td>{{line.airport_name}}</td>
                 <td>{{line.airport_city}}</td>
+                <td>{{line.cust}}</td>
+
                 
               </tr>
             {% endfor %}
@@ -321,7 +327,7 @@
         <div id="collapse7" class="container">
             <div class="panel-body">
                 
-            <h2>Find flights for a range</h2>
+            <h2>View sales reports for a range</h2>
 <form action="/profileStaffDates" method="POST" class="dates-spending">
   <label for="inputFrom" class="">From</label>
   <input type="date" style="width: 160px" name="inputFrom" id="inputFrom" class="form-control" placeholder="From" >
